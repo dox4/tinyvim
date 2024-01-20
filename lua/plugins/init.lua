@@ -101,6 +101,7 @@ local plugins = {
         end,
     },
 
+    -- lsp
     {
         "williamboman/mason.nvim",
         build = ":MasonUpdate",
@@ -110,7 +111,14 @@ local plugins = {
         end,
     },
 
-    -- lsp
+    {
+        "williamboman/mason-lspconfig.nvim",
+        dependencies = { "williamboman/mason.nvim" },
+        config = function()
+            require("plugins.configs.mason_lspconfig")
+        end,
+    },
+
     {
         "neovim/nvim-lspconfig",
         event = { "BufReadPre", "BufNewFile" },
@@ -123,7 +131,18 @@ local plugins = {
     {
         "stevearc/conform.nvim",
         lazy = true,
+        event = { "BufWritePre" },
+        cmd = { "ConformInfo" },
+        dependencies = { "williamboman/mason.nvim" },
         config = function()
+            local ensure_installed = { "stylua", "prettier", "golines", "goimports", "shfmt" }
+            local registry = require("mason-registry")
+            for _, name in ipairs(ensure_installed) do
+                local package = registry.get_package(name)
+                if not package:is_installed() then
+                    package:install()
+                end
+            end
             require("plugins.configs.conform")
         end,
     },
@@ -139,7 +158,14 @@ local plugins = {
 
     -- files finder etc
     {
+        "nvim-telescope/telescope-fzf-native.nvim",
+        build = [[ cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && \
+			cmake --build build --config Release && cmake --install build --prefix build ]],
+    },
+
+    {
         "nvim-telescope/telescope.nvim",
+        dependencies = { "nvim-lua/plenary.nvim" },
         cmd = "Telescope",
         config = function()
             require("plugins.configs.telescope")

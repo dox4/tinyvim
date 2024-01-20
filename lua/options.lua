@@ -19,13 +19,13 @@ opt.smartindent = true
 opt.number = true
 
 -- set listchars=trail:·,nbsp:◇,tab:│\ ,leadmultispace:\┆\ \ \ ,extends:Îõ,precedes:Îõ
-opt.list = true
-opt.listchars:append({ trail = "·" })
-opt.listchars:append({ nbsp = "◇" })
-opt.listchars:append({ tab = "│ " })
-opt.listchars:append({ leadmultispace = "┆   " })
-opt.listchars:append({ extends = "▸" })
-opt.listchars:append({ precedes = "◂" })
+-- opt.list = true
+-- opt.listchars:append({ trail = "·" })
+-- opt.listchars:append({ nbsp = "◇" })
+-- opt.listchars:append({ tab = "│ " })
+-- opt.listchars:append({ leadmultispace = "┆   " })
+-- opt.listchars:append({ extends = "▸" })
+-- opt.listchars:append({ precedes = "◂" })
 
 opt.conceallevel = 0
 

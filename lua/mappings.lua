@@ -5,6 +5,11 @@ map("n", "<C-s>", "<cmd> w <CR>")
 map("i", "jk", "<ESC>")
 map("n", "<C-c>", "<cmd> %y+ <CR>") -- copy whole filecontent
 
+map("n", "<C-h>", "<cmd>wincmd h<cr>", { desc = "Go to left window" })
+map("n", "<C-j>", "<cmd>wincmd j<cr>", { desc = "Go to lower window" })
+map("n", "<C-k>", "<cmd>wincmd k<cr>", { desc = "Go to upper window" })
+map("n", "<C-l>", "<cmd>wincmd l<cr>", { desc = "Go to right window" })
+
 -- nvimtree
 map("n", "<space>e", "<cmd> NvimTreeToggle <CR>")
 -- map("n", "<C-h>", "<cmd> NvimTreeFocus <CR>")
@@ -28,6 +33,6 @@ end)
 map("v", "gc", "<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>")
 
 -- format
-map("n", "<leader>fm", function()
+map("n", "<leader>lf", function()
     require("conform").format()
 end)
