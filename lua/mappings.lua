@@ -6,8 +6,8 @@ map("i", "jk", "<ESC>")
 map("n", "<C-c>", "<cmd> %y+ <CR>") -- copy whole filecontent
 
 -- nvimtree
-map("n", "<C-n>", "<cmd> NvimTreeToggle <CR>")
-map("n", "<C-h>", "<cmd> NvimTreeFocus <CR>")
+map("n", "<space>e", "<cmd> NvimTreeToggle <CR>")
+-- map("n", "<C-h>", "<cmd> NvimTreeFocus <CR>")
 
 -- telescope
 map("n", "<leader>ff", "<cmd> Telescope find_files <CR>")
@@ -21,13 +21,13 @@ map("n", "<S-Tab>", "<cmd> BufferLineCyclePrev <CR>")
 map("n", "<C-q>", "<cmd> bd <CR>")
 
 -- comment.nvim
-map("n", "<leader>/", function()
-  require("Comment.api").toggle.linewise.current()
+map("n", "gcc", function()
+    require("Comment.api").toggle.linewise.current()
 end)
 
-map("v", "<leader>/", "<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>")
+map("v", "gc", "<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>")
 
 -- format
 map("n", "<leader>fm", function()
-  require("conform").format()
+    require("conform").format()
 end)
