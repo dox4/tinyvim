@@ -1,16 +1,52 @@
 local plugins = {
     { lazy = true, "nvim-lua/plenary.nvim" },
 
+    -- themes
+    { "dracula/vim" },
     {
-        "EdenEast/nightfox.nvim",
-        priority = 1000,
-        config = function()
-            require("nightfox").setup({
-                groups = {
-                    all = { VertSplit = { fg = "bg3" } },
-                },
-            })
-        end,
+        "folke/tokyonight.nvim",
+        lazy = true,
+        opts = {
+            style = (function()
+                if math.random() > 0.5 then
+                    return "moon"
+                else
+                    return "night"
+                end
+            end)(),
+        },
+    },
+    {
+        "loctvl842/monokai-pro.nvim",
+        opts = {
+            filter = (function()
+                local filters = {
+                    "classic",
+                    "octagon",
+                    "pro",
+                    "machine",
+                    "ristretto",
+                    "spectrum",
+                }
+                return filters[math.random(#filters)]
+            end)(),
+        },
+    },
+    {
+        "navarasu/onedark.nvim",
+        opts = {
+            style = (function()
+                local styles = {
+                    "dark",
+                    "darker",
+                    "cool",
+                    "deep",
+                    "warm",
+                    "warmer",
+                }
+                return styles[math.random(#styles)]
+            end)(),
+        },
     },
 
     -- file tree
@@ -47,13 +83,11 @@ local plugins = {
             require("plugins.configs.bufferline")
         end,
     },
-
-    -- statusline
-
     {
-        "echasnovski/mini.statusline",
+        "nvim-lualine/lualine.nvim",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
         config = function()
-            require("mini.statusline").setup({ set_vim_settings = false })
+            require("lualine").setup()
         end,
     },
 
@@ -177,7 +211,7 @@ local plugins = {
         "lewis6991/gitsigns.nvim",
         event = { "BufReadPre", "BufNewFile" },
         config = function()
-            require("gitsigns").setup()
+            require("plugins.configs.gitsigns")
         end,
     },
 
@@ -187,6 +221,57 @@ local plugins = {
         lazy = true,
         config = function()
             require("Comment").setup()
+        end,
+    },
+
+    -- which-key
+    {
+        "folke/which-key.nvim",
+        event = "VeryLazy",
+        init = function()
+            vim.o.timeout = true
+            vim.o.timeoutlen = 300
+        end,
+        opts = {},
+        config = function()
+            require("which-key").setup()
+        end,
+    },
+    -- floating terminal
+    {
+        "akinsho/toggleterm.nvim",
+        version = "*",
+        config = function()
+            local Terminal = require("toggleterm.terminal").Terminal
+            local lazygit = nil
+            vim.keymap.set("n", "<leader>gg", function()
+                if lazygit == nil then
+                    lazygit =
+                        Terminal:new({ cmd = "lazygit", hidden = true, direction = "float", close_on_exit = true })
+                end
+                lazygit:toggle()
+            end, { noremap = true, silent = true })
+            local default_terminal = nil
+            -- temrinal
+            vim.keymap.set("n", "<F12>", function()
+                if default_terminal == nil then
+                    default_terminal = Terminal:new({
+                        direction = "float",
+                        -- close_on_exit = true,
+                        on_open = function(term)
+                            vim.cmd("startinsert!")
+                            vim.keymap.set(
+                                "n",
+                                "q",
+                                "<cmd>close<CR>",
+                                { noremap = true, silent = true, buffer = term.bufnr }
+                            )
+                        end,
+                    })
+                end
+                default_terminal:toggle()
+            end)
+            require("plugins.configs.toggleterm")
         end,
     },
 }

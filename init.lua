@@ -20,4 +20,19 @@ vim.opt.rtp:prepend(lazypath)
 
 require("plugins")
 
-vim.cmd("colorscheme nightfox")
+-- set random color scheme
+local function randcs()
+    local themes = {
+        "dracula",
+        "tokyonight",
+        "monokai-pro",
+        "onedark",
+    }
+    math.randomseed(os.time())
+    local index = math.random(#themes)
+    local theme = themes[index]
+    vim.notify("set random theme: " .. theme, vim.log.levels.INFO)
+    return theme
+end
+
+vim.cmd("colorscheme " .. randcs())

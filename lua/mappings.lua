@@ -16,9 +16,9 @@ map("n", "<space>e", "<cmd> NvimTreeToggle <CR>")
 
 -- telescope
 map("n", "<leader>ff", "<cmd> Telescope find_files <CR>")
-map("n", "<leader>fo", "<cmd> Telescope oldfiles <CR>")
 map("n", "<leader>fw", "<cmd> Telescope live_grep <CR>")
-map("n", "<leader>gt", "<cmd> Telescope git_status <CR>")
+-- map("n", "<leader>fo", "<cmd> Telescope oldfiles <CR>")
+-- map("n", "<leader>gt", "<cmd> Telescope git_status <CR>")
 
 -- bufferline, cycle buffers
 map("n", "<Tab>", "<cmd> BufferLineCycleNext <CR>")
@@ -28,11 +28,18 @@ map("n", "<C-q>", "<cmd> bd <CR>")
 -- comment.nvim
 map("n", "gcc", function()
     require("Comment.api").toggle.linewise.current()
-end)
+end, { desc = "toggle current commented" })
 
 map("v", "gc", "<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>")
 
 -- format
 map("n", "<leader>lf", function()
     require("conform").format()
-end)
+end, { desc = "conform format" })
+
+-- Lazy
+map("n", "<leader>lz", "<cmd> Lazy <CR>", { desc = "Lazy" })
+
+-- Mason
+map("n", "<leader>lm", "<cmd> Mason <CR>", { desc = "Mason" })
+
