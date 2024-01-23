@@ -43,3 +43,11 @@ map("n", "<leader>lz", "<cmd> Lazy <CR>", { desc = "Lazy" })
 -- Mason
 map("n", "<leader>lm", "<cmd> Mason <CR>", { desc = "Mason" })
 
+-- LspInfo
+map("n", "<leader>li", "<cmd> LspInfo <CR>", { desc = "LspInfo" })
+
+-- Conform
+map("n", "<leader>lc", "<cmd> ConformInfo <CR>", { desc = "ConformInfo" })
+
+-- save file manually
+map("n", "<C-s>", "<cmd> write <CR>", { desc = "save file manually" })

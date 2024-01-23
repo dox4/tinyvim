@@ -77,11 +77,63 @@ lspconfig.lua_ls.setup({
     },
 })
 
--- setup multiple servers with same default options
-local servers = { "tsserver", "html", "cssls" }
+lspconfig.gopls.setup({
+    settings = {
+        gopls = {
+            gofumpt = true,
+            hints = {
+                assignVariableTypes = true,
+                compositeLiteralFields = true,
+                compositeLiteralTypes = true,
+                constantValues = true,
+                functionTypeParameters = true,
+                parameterNames = true,
+                rangeVariableTypes = true,
+            },
+            analyses = {
+                fieldalignment = true,
+                nilness = true,
+                unusedparams = true,
+                unusedwrite = true,
+                useany = true,
+            },
+            usePlaceholders = true,
+            completeUnimported = true,
+            directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
+            semanticTokens = true,
+            staticcheck = (function()
+                local go_version = vim.fn.system("go version")
+                local captured_version = string.match(go_version, "go(%d+.%d+.%d+)")
+                return captured_version > "1.18.10"
+            end)(),
+        },
+    },
+})
 
-for _, lsp in ipairs(servers) do
-    lspconfig[lsp].setup({
-        capabilities = capabilities,
-    })
-end
+lspconfig.rust_analyzer.setup({
+    settings = {
+        ["rust-analyzer"] = {
+            cargo = {
+                allFeatures = true,
+                loadOutDirsFromCheck = true,
+                runBuildScripts = true,
+            },
+            -- Add clippy lints for Rust.
+            checkOnSave = {
+                allFeatures = true,
+                command = "clippy",
+                extraArgs = { "--no-deps" },
+            },
+            procMacro = {
+                enable = true,
+                ignored = {
+                    ["async-trait"] = { "async_trait" },
+                    ["napi-derive"] = { "napi" },
+                    ["async-recursion"] = { "async_recursion" },
+                },
+            },
+        },
+    },
+})
+
+lspconfig.ruff_lsp.setup({})

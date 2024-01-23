@@ -148,9 +148,9 @@ local plugins = {
     {
         "williamboman/mason-lspconfig.nvim",
         dependencies = { "williamboman/mason.nvim" },
-        config = function()
-            require("plugins.configs.mason_lspconfig")
-        end,
+        opts = {
+            ensure_installed = { "lua_ls", "rust_analyzer", "ruff_lsp", "gopls" },
+        },
     },
 
     {

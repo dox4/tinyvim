@@ -16,12 +16,13 @@ vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
         end
         if is_modifiable() then
             local bufname = vim.api.nvim_buf_get_name(bufnum)
-            -- maybe a plugin-defined buf
-            -- not an exactly condition
+            -- maybe a plugin-defined but not an exactly condition
             if bufname == "" then
                 return
             end
             vim.api.nvim_buf_call(bufnum, function()
+                -- format on auto save
+                -- require("conform").format()
                 vim.cmd("silent! write")
             end)
             local msg = ("buf %%%d: %s automatically saved at %s."):format(bufnum, bufname, vim.fn.strftime("%H:%M:%S"))
