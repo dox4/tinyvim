@@ -53,9 +53,12 @@ local plugins = {
     {
         "nvim-tree/nvim-tree.lua",
         cmd = { "NvimTreeToggle", "NvimTreeFocus" },
-        config = function()
-            require("nvim-tree").setup()
-        end,
+        opts = {
+            update_focused_file = {
+                enable = true,
+                update_cwd = true,
+            },
+        },
     },
 
     -- icons, for UI related plugins
