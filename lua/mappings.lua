@@ -34,7 +34,11 @@ map("v", "gc", "<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visu
 
 -- format
 map("n", "<leader>lf", function()
-    require("conform").format()
+    require("conform").format({
+        lsp_fallback = true,
+        async = false,
+        timeout_ms = 500,
+    })
 end, { desc = "conform format" })
 
 -- Lazy
@@ -51,3 +55,9 @@ map("n", "<leader>lc", "<cmd> ConformInfo <CR>", { desc = "ConformInfo" })
 
 -- save file manually
 map("n", "<C-s>", "<cmd> write <CR>", { desc = "save file manually" })
+
+-- buffers
+map("n", "<leader>bd", "<cmd> bd <CR>", { desc = "delete current buffer" })
+
+-- quit all
+map("n", "<leader>qq", "<cmd> confirm quitall <CR>", { desc = "confirm quit all" })

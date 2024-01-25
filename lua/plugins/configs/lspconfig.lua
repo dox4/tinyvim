@@ -2,7 +2,7 @@
 -- vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
-vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist)
+-- vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist)
 
 -- Use LspAttach autocommand to only map the following keys
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -136,4 +136,21 @@ lspconfig.rust_analyzer.setup({
     },
 })
 
-lspconfig.ruff_lsp.setup({})
+lspconfig.ruff_lsp.setup({
+    on_attach = function(client, _)
+        -- Disable hover in favor of Pyright
+        client.server_capabilities.hoverProvider = false
+    end,
+    init_options = {
+        settings = {
+            format = {
+                args = {
+                    "--line-length",
+                    "120",
+                },
+            },
+            args = {},
+        },
+    },
+})
+lspconfig.pyright.setup({})

@@ -3,8 +3,8 @@ local augroup = vim.api.nvim_create_augroup("user_commands", { clear = true })
 vim.api.nvim_create_autocmd({ "InsertLeave", "TextChanged" }, {
     group = augroup,
     pattern = "*",
-    callback = function()
-        local bufnum = vim.api.nvim_get_current_buf()
+    callback = function(ev)
+        local bufnum = ev.buf
 
         -- buf not loaded
         if vim.fn.bufloaded(bufnum) ~= 1 then

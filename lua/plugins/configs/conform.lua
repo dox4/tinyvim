@@ -2,14 +2,8 @@ require("conform").setup({
     formatters_by_ft = {
         lua = { "stylua" },
         go = { "goimports", "gofmt", "gofumpt" },
-        python = function(bufnr)
-            if require("conform").get_formatter_info("ruff_format", bufnr).available then
-                return { "ruff_format" }
-            else
-                return { "isort", "autopep8" }
-            end
-        end,
         sh = { "shfmt" },
+        json = { "prettier" },
     },
     format_on_save = {
         -- I recommend these options. See :help conform.format for details.
@@ -17,9 +11,9 @@ require("conform").setup({
         timeout_ms = 500,
     },
     formatters = {
-        autopep8 = {
+        prettier = {
             inherit = true,
-            prepend_args = { "--max-line-length", "120" },
+            prepend_args = { "--tab-width", "4" },
         },
     },
 })
