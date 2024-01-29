@@ -14,9 +14,23 @@ map("n", "<C-l>", "<cmd>wincmd l<cr>", { desc = "Go to right window" })
 map("n", "<space>e", "<cmd> NvimTreeToggle <CR>")
 -- map("n", "<C-h>", "<cmd> NvimTreeFocus <CR>")
 
+local expand_nvim_tree = false
+map("n", "<leader>nz", function()
+    if expand_nvim_tree then
+        vim.cmd("NvimTreeResize 30")
+        expand_nvim_tree = false
+    else
+        vim.cmd("NvimTreeResize 100")
+        expand_nvim_tree = true
+    end
+    vim.cmd("NvimTreeFocus")
+end, { desc = "toggle nvim tree size" })
+-- map("n", "<C-h>", "<cmd> NvimTreeFocus <CR>")
+
 -- telescope
-map("n", "<leader>ff", "<cmd> Telescope find_files <CR>")
-map("n", "<leader>fw", "<cmd> Telescope live_grep <CR>")
+map("n", "<leader>ff", "<cmd> Telescope find_files <CR>", { desc = "Telescope find_files" })
+map("n", "<leader>fw", "<cmd> Telescope live_grep <CR>", { desc = "Telescope live_grep" })
+map("n", "<leader>fb", "<cmd> Telescope buffers <CR>", { desc = "Telescope buffers" })
 -- map("n", "<leader>fo", "<cmd> Telescope oldfiles <CR>")
 -- map("n", "<leader>gt", "<cmd> Telescope git_status <CR>")
 
