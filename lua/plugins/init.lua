@@ -14,6 +14,12 @@ local plugins = {
                     return "night"
                 end
             end)(),
+            styles = {
+                comments = { italic = true },
+                transparent = true,
+                sidebars = "transparent",
+                floats = "transparent",
+            },
         },
     },
     {
@@ -30,6 +36,8 @@ local plugins = {
                 }
                 return filters[math.random(#filters)]
             end)(),
+            transparent_background = true,
+            terminal_colors = true,
         },
     },
     {
@@ -46,6 +54,10 @@ local plugins = {
                 }
                 return styles[math.random(#styles)]
             end)(),
+            transparent = true,
+            lualine = {
+                transparent = true,
+            },
         },
     },
 
