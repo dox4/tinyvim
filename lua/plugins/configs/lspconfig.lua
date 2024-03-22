@@ -154,3 +154,4 @@ lspconfig.ruff_lsp.setup({
     },
 })
 lspconfig.pyright.setup({})
+lspconfig.clangd.setup({})
