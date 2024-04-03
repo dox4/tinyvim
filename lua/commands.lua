@@ -13,3 +13,11 @@ vim.api.nvim_create_autocmd({ "TermOpen" }, {
         -- vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], opts)
     end,
 })
+
+vim.api.nvim_create_autocmd("TextYankPost", {
+    group = augroup,
+    pattern = "*",
+    callback = function(_)
+        vim.highlight.on_yank({ higroup = "IncSearch", timeout = 500 })
+    end,
+})
