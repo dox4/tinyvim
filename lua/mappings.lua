@@ -37,7 +37,6 @@ map("n", "<leader>fb", "<cmd> Telescope buffers <CR>", { desc = "Telescope buffe
 -- bufferline, cycle buffers
 map("n", "<Tab>", "<cmd> BufferLineCycleNext <CR>")
 map("n", "<S-Tab>", "<cmd> BufferLineCyclePrev <CR>")
-map("n", "<C-q>", "<cmd> bd <CR>")
 
 -- comment.nvim
 map("n", "gcc", function()
@@ -74,7 +73,11 @@ map("n", "<leader>lc", "<cmd> ConformInfo <CR>", { desc = "ConformInfo" })
 map("n", "<C-s>", "<cmd> write <CR>", { desc = "save file manually" })
 
 -- buffers
-map("n", "<leader>bd", "<cmd> bd <CR>", { desc = "delete current buffer" })
+map("n", "<leader>bd", function()
+    local buf = vim.api.nvim_get_current_buf()
+    vim.cmd("BufferLineCyclePrev")
+    vim.api.nvim_buf_delete(buf, {})
+end, { desc = "delete current buffer" })
 
 -- quit all
 map("n", "<leader>qq", "<cmd> confirm quitall <CR>", { desc = "confirm quit all" })
