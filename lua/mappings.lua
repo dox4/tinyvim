@@ -46,6 +46,9 @@ end, { desc = "toggle current commented" })
 
 map("v", "gc", "<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>")
 
+-- outline
+map("n", "<leader>a", "<cmd>AerialToggle!<CR>")
+
 -- format
 map("n", "<leader>lf", function()
     require("conform").format({

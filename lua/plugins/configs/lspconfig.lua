@@ -43,6 +43,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
         -- vim.keymap.set("n", "<space>f", function()
         --   vim.lsp.buf.format { async = true }
         -- end, opts)
+		vim.lsp.inlay_hint.enable(true)
     end,
 })
 

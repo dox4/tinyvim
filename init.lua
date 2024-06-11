@@ -23,7 +23,7 @@ require("plugins")
 -- set random color scheme
 local function randcs()
     local themes = {
-        "dracula",
+        -- "dracula",
         "tokyonight",
         "monokai-pro",
         "onedark",

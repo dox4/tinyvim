@@ -65,12 +65,9 @@ local plugins = {
     {
         "nvim-tree/nvim-tree.lua",
         cmd = { "NvimTreeToggle", "NvimTreeFocus" },
-        opts = {
-            update_focused_file = {
-                enable = true,
-                update_cwd = true,
-            },
-        },
+        config = function()
+            require("plugins.configs.nvimtree")
+        end,
     },
 
     -- icons, for UI related plugins
@@ -261,35 +258,6 @@ local plugins = {
         "akinsho/toggleterm.nvim",
         version = "*",
         config = function()
-            local Terminal = require("toggleterm.terminal").Terminal
-            local lazygit = nil
-            vim.keymap.set("n", "<leader>gg", function()
-                if lazygit == nil then
-                    lazygit =
-                        Terminal:new({ cmd = "lazygit", hidden = true, direction = "float", close_on_exit = true })
-                end
-                lazygit:toggle()
-            end, { noremap = true, silent = true })
-            local default_terminal = nil
-            -- temrinal
-            vim.keymap.set("n", "<F12>", function()
-                if default_terminal == nil then
-                    default_terminal = Terminal:new({
-                        direction = "float",
-                        -- close_on_exit = true,
-                        on_open = function(term)
-                            vim.cmd("startinsert!")
-                            vim.keymap.set(
-                                "n",
-                                "q",
-                                "<cmd>close<CR>",
-                                { noremap = true, silent = true, buffer = term.bufnr }
-                            )
-                        end,
-                    })
-                end
-                default_terminal:toggle()
-            end)
             require("plugins.configs.toggleterm")
         end,
     },
@@ -304,6 +272,24 @@ local plugins = {
                 enable = true,
                 prompt_message = function()
                     return "autosave: " .. vim.fn.expand("%:p:.") .. " saved at " .. vim.fn.strftime("%H:%M:%S")
+                end,
+            })
+        end,
+    },
+    -- outline
+    {
+        "stevearc/aerial.nvim",
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter",
+            "nvim-tree/nvim-web-devicons",
+        },
+        config = function()
+            require("aerial").setup({
+                lazy_load = false,
+                open_automatic = true,
+                on_attach = function(bufnr)
+                    vim.keymap.set("n", "[a", "<cmd>AerialPrev<CR>", { buffer = bufnr })
+                    vim.keymap.set("n", "]a", "<cmd>AerialNext<CR>", { buffer = bufnr })
                 end,
             })
         end,
