@@ -14,12 +14,12 @@ vim.api.nvim_create_autocmd({ "TermOpen" }, {
     end,
 })
 
-vim.api.nvim_create_autocmd("VimEnter", {
-    group = augroup,
-    callback = function()
-        require("nvim-tree.api").tree.toggle({ focus = false, find_file = true })
-    end,
-})
+-- vim.api.nvim_create_autocmd("VimEnter", {
+--     group = augroup,
+--     callback = function()
+--         require("nvim-tree.api").tree.toggle({ focus = false, find_file = true })
+--     end,
+-- })
 
 vim.api.nvim_create_autocmd("TextYankPost", {
     group = augroup,

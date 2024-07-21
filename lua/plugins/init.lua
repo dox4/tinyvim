@@ -297,7 +297,7 @@ local plugins = {
         config = function()
             require("aerial").setup({
                 lazy_load = false,
-                open_automatic = true,
+                -- open_automatic = true,
                 on_attach = function(bufnr)
                     vim.keymap.set("n", "[a", "<cmd>AerialPrev<CR>", { buffer = bufnr })
                     vim.keymap.set("n", "]a", "<cmd>AerialNext<CR>", { buffer = bufnr })
