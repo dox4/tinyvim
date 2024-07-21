@@ -343,18 +343,7 @@ local plugins = {
     	},
 
         config = function()
-            local opts = require("plugins.configs.mason_nvim_dap")
-            require("mason-nvim-dap").setup(opts)
-
             vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
-
-            -- for name, sign in pairs(LazyVim.config.icons.dap) do
-            --     sign = type(sign) == "table" and sign or { sign }
-            --     vim.fn.sign_define(
-            --         "Dap" .. name,
-            --         { text = sign[1], texthl = sign[2] or "DiagnosticInfo", linehl = sign[3], numhl = sign[3] }
-            --     )
-            -- end
 
             -- setup dap config by VsCode launch.json file
             local vscode = require("dap.ext.vscode")
@@ -362,6 +351,7 @@ local plugins = {
             vscode.json_decode = function(str)
                 return vim.json.decode(json.json_strip_comments(str))
             end
+            require("plugins.configs.dap")
         end,
     },
 
@@ -389,15 +379,6 @@ local plugins = {
                 dapui.close({})
             end
         end,
-    },
-
-    -- mason.nvim integration
-    {
-        "jay-babu/mason-nvim-dap.nvim",
-        dependencies = "mason.nvim",
-        cmd = { "DapInstall", "DapUninstall" },
-        -- mason-nvim-dap is loaded when nvim-dap loads
-        config = function() end,
     },
 }
 
