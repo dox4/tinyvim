@@ -82,6 +82,8 @@ dap.adapters.python = function(cb, config)
     end
 end
 
+dap.adapters.debugpy = dap.adapters.python
+
 dap.configurations.python = {
     {
         -- The first three options are required by nvim-dap
