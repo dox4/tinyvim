@@ -43,7 +43,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
         -- vim.keymap.set("n", "<space>f", function()
         --   vim.lsp.buf.format { async = true }
         -- end, opts)
-		vim.lsp.inlay_hint.enable(true)
+        vim.lsp.inlay_hint.enable(true)
     end,
 })
 
@@ -103,7 +103,14 @@ lspconfig.gopls.setup({
             directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
             semanticTokens = true,
             staticcheck = (function()
-                local go_version = vim.fn.system("go version")
+                local go_version = (function()
+                    if vim.loop.os_uname().sysname == "Windows_NT" then
+                        return vim.fn.system("go version")
+                    else
+                        local path = vim.fn.getenv("PATH")
+                        return vim.fn.system("PATH=" .. path .. " go version")
+                    end
+                end)()
                 local captured_version = string.match(go_version, "go(%d+.%d+.%d+)")
                 return captured_version > "1.18.10"
             end)(),
@@ -156,3 +163,4 @@ lspconfig.ruff_lsp.setup({
 })
 lspconfig.pyright.setup({})
 lspconfig.clangd.setup({})
+lspconfig.bashls.setup({})

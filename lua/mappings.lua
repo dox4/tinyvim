@@ -75,7 +75,10 @@ map("n", "<C-s>", "<cmd> write <CR>", { desc = "save file manually" })
 -- buffers
 map("n", "<leader>bd", function()
     local buf = vim.api.nvim_get_current_buf()
-    vim.cmd("BufferLineCyclePrev")
+    local last_buffer = vim.g.last_buffer_number
+    if last_buffer ~= nil then
+        vim.api.nvim_set_current_buf(last_buffer)
+    end
     vim.api.nvim_buf_delete(buf, {})
 end, { desc = "delete current buffer" })
 

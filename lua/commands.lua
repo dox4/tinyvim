@@ -28,3 +28,11 @@ vim.api.nvim_create_autocmd("TextYankPost", {
         vim.highlight.on_yank({ higroup = "IncSearch", timeout = 500 })
     end,
 })
+
+vim.api.nvim_create_autocmd("BufLeave", {
+    group = augroup,
+    pattern = "*",
+    callback = function(ev)
+        vim.g.last_buffer_number = ev.buf
+    end,
+})
