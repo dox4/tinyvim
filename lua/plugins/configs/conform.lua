@@ -4,6 +4,9 @@ require("conform").setup({
         go = { "gofmt", "golines" },
         sh = { "shfmt" },
         json = { "prettier" },
+        jsonc = { "prettier" },
+        vue = { "prettier" },
+        ts = { "prettier" },
     },
     formatters = {
         prettier = {

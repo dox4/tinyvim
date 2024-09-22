@@ -79,6 +79,7 @@ lspconfig.lua_ls.setup({
 })
 
 lspconfig.gopls.setup({
+    capabilities = capabilities,
     settings = {
         gopls = {
             gofumpt = true,
@@ -119,6 +120,7 @@ lspconfig.gopls.setup({
 })
 
 lspconfig.rust_analyzer.setup({
+    capabilities = capabilities,
     settings = {
         ["rust-analyzer"] = {
             cargo = {
@@ -145,6 +147,7 @@ lspconfig.rust_analyzer.setup({
 })
 
 lspconfig.ruff_lsp.setup({
+    capabilities = capabilities,
     on_attach = function(client, _)
         -- Disable hover in favor of Pyright
         client.server_capabilities.hoverProvider = false
@@ -161,6 +164,42 @@ lspconfig.ruff_lsp.setup({
         },
     },
 })
-lspconfig.pyright.setup({})
-lspconfig.clangd.setup({})
-lspconfig.bashls.setup({})
+lspconfig.pyright.setup({
+    capabilities = capabilities,
+})
+lspconfig.clangd.setup({
+    capabilities = capabilities,
+})
+
+lspconfig.bashls.setup({
+    capabilities = capabilities,
+})
+
+-- If you are using mason.nvim, you can get the ts_plugin_path like this
+local mason_registry = require("mason-registry")
+local vue_language_server_path = mason_registry.get_package("vue-language-server"):get_install_path()
+    .. "/node_modules/@vue/language-server"
+
+lspconfig.tsserver.setup({
+    capabilities = capabilities,
+    init_options = {
+        plugins = {
+            {
+                name = "@vue/typescript-plugin",
+                location = vue_language_server_path,
+                languages = { "vue" },
+            },
+        },
+    },
+    filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+})
+
+lspconfig.eslint.setup({})
+lspconfig.volar.setup({
+    capabilities = capabilities,
+    init_options = {
+        vue = {
+            hybridMode = false,
+        },
+    },
+})
