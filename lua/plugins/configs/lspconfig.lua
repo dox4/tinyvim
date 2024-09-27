@@ -113,7 +113,7 @@ lspconfig.gopls.setup({
                     end
                 end)()
                 local captured_version = string.match(go_version, "go(%d+.%d+.%d+)")
-                return captured_version > "1.18.10"
+                return captured_version and captured_version > "1.18.10"
             end)(),
         },
     },
@@ -180,7 +180,27 @@ local mason_registry = require("mason-registry")
 local vue_language_server_path = mason_registry.get_package("vue-language-server"):get_install_path()
     .. "/node_modules/@vue/language-server"
 
+local tsserver_settings = {
+    preferences = {
+        quotePreference = "double",
+    },
+    inlayHints = {
+        includeInlayEnumMemberValueHints = true,
+        includeInlayFunctionLikeReturnTypeHints = true,
+        includeInlayFunctionParameterTypeHints = true,
+        includeInlayParameterNameHints = "all",
+        includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+        includeInlayPropertyDeclarationTypeHints = true,
+        includeInlayVariableTypeHints = true,
+        includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+    },
+}
+
 lspconfig.tsserver.setup({
+    on_attach = function(client, _)
+        -- 禁用 tsserver 的格式化功能，使用其他格式化工具
+        client.server_capabilities.documentFormattingProvider = false
+    end,
     capabilities = capabilities,
     init_options = {
         plugins = {
@@ -192,6 +212,10 @@ lspconfig.tsserver.setup({
         },
     },
     filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+    settings = {
+        typescript = tsserver_settings,
+        javascript = tsserver_settings,
+    },
 })
 
 lspconfig.eslint.setup({})

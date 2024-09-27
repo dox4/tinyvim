@@ -73,9 +73,30 @@ map("n", "<leader>lc", "<cmd> ConformInfo <CR>", { desc = "ConformInfo" })
 map("n", "<C-s>", "<cmd> write <CR>", { desc = "save file manually" })
 
 -- buffers
+local function remove_of(ctx, buf)
+    local index = 1
+    local function file_type_ok(b)
+        local file_type = vim.api.nvim_buf_get_option(b, "filetype")
+        return file_type ~= nil and file_type ~= ""
+    end
+    while index <= #ctx.buffers_history do
+        local buffer = ctx.buffers_history[index]
+        if buffer == buf then
+            table.remove(ctx.buffers_history, index)
+        elseif not (vim.api.nvim_buf_is_valid(buffer) and vim.api.nvim_buf_is_loaded(buffer)) then
+            table.remove(ctx.buffers_history, index)
+        elseif not file_type_ok(buffer) then
+            table.remove(ctx.buffers_history, index)
+        else
+            index = index + 1
+        end
+    end
+end
 map("n", "<leader>bd", function()
     local buf = vim.api.nvim_get_current_buf()
-    local last_buffer = vim.g.last_buffer_number
+    local ctx = require("context")
+    remove_of(ctx, buf)
+    local last_buffer = ctx.buffers_history[#ctx.buffers_history]
     if last_buffer ~= nil then
         vim.api.nvim_set_current_buf(last_buffer)
     end

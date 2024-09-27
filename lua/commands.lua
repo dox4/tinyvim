@@ -33,6 +33,8 @@ vim.api.nvim_create_autocmd("BufLeave", {
     group = augroup,
     pattern = "*",
     callback = function(ev)
-        vim.g.last_buffer_number = ev.buf
+        local buf = ev.buf
+        local ctx = require("context")
+        table.insert(ctx.buffers_history, buf)
     end,
 })
