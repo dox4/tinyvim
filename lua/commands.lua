@@ -29,12 +29,37 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     end,
 })
 
+local function index_of(t, elem)
+    for idx, v in ipairs(t) do
+        if v == elem then
+            return idx
+        end
+    end
+    return nil
+end
 vim.api.nvim_create_autocmd("BufLeave", {
     group = augroup,
     pattern = "*",
     callback = function(ev)
+        if vim.g.buffers_cache == nil then
+            vim.g.buffers_cache = {}
+        end
+        if vim.g.max_buffers_cache_length == nil then
+            vim.g.max_buffers_cache_length = 10
+        end
         local buf = ev.buf
-        local ctx = require("context")
-        table.insert(ctx.buffers_history, buf)
+        -- local ft = vim.api.nvim_buf_get_option(buf, "filetype")
+        -- if ft == "NvimTree" then
+        --     vim.notify("skip NvimTree buffer, index is " .. (buf), vim.log.levels.DEBUG)
+        --     return
+        -- end
+        local idx = index_of(vim.g.buffers_cache, buf)
+        if idx ~= nil then
+            table.remove(vim.g.buffers_cache, idx)
+        end
+        table.insert(vim.g.buffers_cache, buf)
+        if #vim.g.buffers_cache > vim.g.max_buffers_cache_length then
+            table.remove(vim.g.buffers_cache, 1)
+        end
     end,
 })
