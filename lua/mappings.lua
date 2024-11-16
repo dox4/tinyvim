@@ -91,3 +91,6 @@ end, { desc = "delete current buffer" })
 
 -- quit all
 map("n", "<leader>qq", "<cmd> confirm quitall <CR>", { desc = "confirm quit all" })
+
+-- noh 清除匹配高亮
+map("n", "<leader>ch", "<cmd> noh <cr>", { desc = "clear search match highlight" })
