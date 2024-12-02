@@ -146,7 +146,7 @@ lspconfig.rust_analyzer.setup({
     },
 })
 
-lspconfig.ruff_lsp.setup({
+lspconfig.ruff.setup({
     capabilities = capabilities,
     on_attach = function(client, _)
         -- Disable hover in favor of Pyright
@@ -196,7 +196,7 @@ local tsserver_settings = {
     },
 }
 
-lspconfig.tsserver.setup({
+lspconfig.ts_ls.setup({
     on_attach = function(client, _)
         -- 禁用 tsserver 的格式化功能，使用其他格式化工具
         client.server_capabilities.documentFormattingProvider = false

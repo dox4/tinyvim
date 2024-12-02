@@ -52,8 +52,8 @@ map("n", "<leader>a", "<cmd>AerialToggle!<CR>")
 map("n", "<leader>lf", function()
     require("conform").format({
         lsp_fallback = true,
-        async = false,
-        timeout_ms = 500,
+        async = true,
+        timeout_ms = 1500,
     })
 end, { desc = "conform format" })
 

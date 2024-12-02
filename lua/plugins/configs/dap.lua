@@ -13,6 +13,7 @@ dap.adapters.delve = {
         detached = vim.loop.os_uname().sysname ~= "Windows_NT",
     },
 }
+dap.adapters.go = dap.adapters.delve
 
 -- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
 dap.configurations.go = {

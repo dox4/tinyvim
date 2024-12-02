@@ -40,4 +40,7 @@ vim.keymap.set("n", "<leader>bt", function()
     bottom_terminal:toggle()
 end, { desc = "toggle bottom terminal." })
 
-require("toggleterm").setup({})
+require("toggleterm").setup({
+    start_in_insert = true,
+    persist_mode = false,
+})
