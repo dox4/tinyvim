@@ -56,6 +56,16 @@ map("n", "<leader>lf", function()
         timeout_ms = 1500,
     })
 end, { desc = "conform format" })
+map("v", "<leader>f", function()
+    require("conform").format({
+        lsp_fallback = true,
+        range = {
+            -- 获取选中区域的起始和结束行号
+            start = vim.api.nvim_buf_get_mark(0, "<"),
+            ["end"] = vim.api.nvim_buf_get_mark(0, ">"),
+        },
+    })
+end, { desc = "ranged format" })
 
 -- Lazy
 map("n", "<leader>lz", "<cmd> Lazy <CR>", { desc = "Lazy" })
