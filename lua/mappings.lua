@@ -31,6 +31,7 @@ end, { desc = "toggle nvim tree size" })
 map("n", "<leader>ff", "<cmd> Telescope find_files <CR>", { desc = "Telescope find_files" })
 map("n", "<leader>fw", "<cmd> Telescope live_grep <CR>", { desc = "Telescope live_grep" })
 map("n", "<leader>fb", "<cmd> Telescope buffers <CR>", { desc = "Telescope buffers" })
+map("n", "<leader>fd", "<cmd> Telescope diagnostics <CR>", { desc = "Telescope diagnostics" })
 -- map("n", "<leader>fo", "<cmd> Telescope oldfiles <CR>")
 -- map("n", "<leader>gt", "<cmd> Telescope git_status <CR>")
 
@@ -104,3 +105,23 @@ map("n", "<leader>qq", "<cmd> confirm quitall <CR>", { desc = "confirm quit all"
 
 -- noh 清除匹配高亮
 map("n", "<leader>ch", "<cmd> noh <cr>", { desc = "clear search match highlight" })
+
+-- overseer
+-- OverseerBuild
+-- OverseerClearCache
+-- OverseerClose
+-- OverseerDeleteBundle
+-- OverseerInfo
+map("n", "<leader>oi", "<cmd> OverseerInfo <CR>", { desc = "OverseerInfo" })
+-- OverseerLoadBundle
+-- OverseerOpen
+map("n", "<leader>oo", "<cmd> OverseerOpen <CR>", { desc = "OverseerOpen" })
+-- OverseerQuickAction
+-- OverseerRun
+map("n", "<leader>or", "<cmd> OverseerRun <CR>", { desc = "OverseerRun" })
+-- OverseerRunCmd
+map("n", "<leader>oc", "<cmd> OverseerRunCmd ", { desc = "OverseerRunCmd" })
+-- OverseerSaveBundle
+-- OverseerTaskAction
+-- OverseerToggle
+map("n", "<leader>ot", "<cmd> OverseerToggle <CR>", { desc = "OverseerToggle" })

@@ -175,19 +175,19 @@ local plugins = {
 
     -- lsp
     {
-        "williamboman/mason.nvim",
-        build = ":MasonUpdate",
-        cmd = { "Mason", "MasonInstall" },
-        config = function()
-            require("mason").setup()
-        end,
+        "mason-org/mason.nvim",
+        opts = {},
     },
 
     {
-        "williamboman/mason-lspconfig.nvim",
-        dependencies = { "williamboman/mason.nvim" },
+        "mason-org/mason-lspconfig.nvim",
         opts = {
-            ensure_installed = { "lua_ls", "rust_analyzer", "ruff", "gopls" },
+            ensure_installed = { "lua_ls", "rust_analyzer", "ruff", "gopls", "vtsls" },
+            automatic_enable = { "vtsls" },
+        },
+        dependencies = {
+            { "mason-org/mason.nvim", opts = {} },
+            "neovim/nvim-lspconfig",
         },
     },
 
@@ -416,6 +416,15 @@ local plugins = {
                 dapui.close({})
             end
         end,
+    },
+    {
+        "stevearc/overseer.nvim",
+        dependencies = {
+            "nvim-telescope/telescope.nvim",
+        },
+        opts = {
+            -- strategy = "toggleterm",
+        },
     },
 }
 

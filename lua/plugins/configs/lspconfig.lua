@@ -1,7 +1,11 @@
 -- Global mappings.
 -- vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
-vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
-vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
+vim.keymap.set("n", "[d", function()
+    vim.diagnostic.jump({ count = -1, float = true })
+end)
+vim.keymap.set("n", "]d", function()
+    vim.diagnostic.jump({ count = 1 , float = true, virtual_text = true})
+end)
 -- vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist)
 
 -- Use LspAttach autocommand to only map the following keys
@@ -115,6 +119,7 @@ vim.lsp.config("gopls", {
         },
     },
 })
+vim.lsp.enable("gopls")
 
 vim.lsp.config("rust_analyzer", {
     capabilities = capabilities,
@@ -161,13 +166,17 @@ vim.lsp.config("ruff", {
         },
     },
 })
-vim.lsp.config("pyright", {
+vim.lsp.config("basedpyright", {
     capabilities = capabilities,
 })
+
+vim.lsp.enable({ "ruff", "basedpyright" })
+
 vim.lsp.config("clangd", {
     capabilities = capabilities,
 })
 
+vim.lsp.enable("bashls")
 vim.lsp.config("bashls", {
     capabilities = capabilities,
 })
@@ -185,21 +194,11 @@ local vue_plugin = {
     configNamespace = "typescript",
 }
 local vtsls_config = {
-    init_options = {
-        plugins = {
-            vue_plugin,
-        },
-    },
-    filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
     settings = {
-        complete_function_calls = true,
         vtsls = {
-            enableMoveToFileCodeAction = true,
-            autoUseWorkspaceTsdk = true,
-            experimental = {
-                maxInlayHintLength = 30,
-                completion = {
-                    enableServerSideFuzzyMatch = true,
+            tsserver = {
+                globalPlugins = {
+                    vue_plugin,
                 },
             },
         },
@@ -208,20 +207,63 @@ local vtsls_config = {
             suggest = {
                 completeFunctionCalls = true,
             },
-            inlayHints = {
-                enumMemberValues = { enabled = true },
-                functionLikeReturnTypes = { enabled = true },
-                parameterNames = { enabled = "literals" },
-                parameterTypes = { enabled = true },
-                propertyDeclarationTypes = { enabled = true },
-                variableTypes = { enabled = true },
-            },
+            -- inlayHints = {
+            --     enumMemberValues = { enabled = true },
+            --     functionLikeReturnTypes = { enabled = true },
+            --     parameterNames = { enabled = "literals" },
+            --     parameterTypes = { enabled = true },
+            --     propertyDeclarationTypes = { enabled = true },
+            --     variableTypes = { enabled = true },
+            -- },
             preferences = {
+                importModuleSpecifier = "non-relative",
                 quoteStyle = "double",
+            },
+            format = {
+                semicolons = "remove",
             },
         },
     },
+    filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
 }
+-- local vtsls_config = {
+--     init_options = {
+--         plugins = {
+--             vue_plugin,
+--         },
+--     },
+--     filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+--     settings = {
+--         complete_function_calls = true,
+--         vtsls = {
+--             enableMoveToFileCodeAction = true,
+--             autoUseWorkspaceTsdk = true,
+--             experimental = {
+--                 maxInlayHintLength = 30,
+--                 completion = {
+--                     enableServerSideFuzzyMatch = true,
+--                 },
+--             },
+--         },
+--         typescript = {
+--             updateImportsOnFileMove = { enabled = "always" },
+--             suggest = {
+--                 completeFunctionCalls = true,
+--             },
+--             inlayHints = {
+--                 enumMemberValues = { enabled = true },
+--                 functionLikeReturnTypes = { enabled = true },
+--                 parameterNames = { enabled = "literals" },
+--                 parameterTypes = { enabled = true },
+--                 propertyDeclarationTypes = { enabled = true },
+--                 variableTypes = { enabled = true },
+--             },
+--             preferences = {
+--                 quoteStyle = "double",
+--             },
+--         },
+--     },
+-- }
 local vue_ls_config = {
     filetypes = { "vue" },
     on_init = function(client)
@@ -260,7 +302,6 @@ local vue_ls_config = {
 -- nvim 0.11 or above
 vim.lsp.config("vtsls", vtsls_config)
 vim.lsp.config("vue_ls", vue_ls_config)
-vim.lsp.enable("vtsls")
-vim.lsp.enable("vue_ls")
+vim.lsp.enable({ "vtsls", "vue_ls" })
 vim.lsp.config("eslint", {})
 
