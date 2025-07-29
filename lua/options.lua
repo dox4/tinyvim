@@ -1,6 +1,6 @@
+vim.g.base46_cache = vim.fn.stdpath("data") .. "/base46/"
+
 local opt = vim.opt
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
 
 vim.g.autoformat = false
 vim.g.mapleader = " "
@@ -20,15 +20,6 @@ opt.autoindent = true
 opt.expandtab = false
 opt.smartindent = true
 opt.number = true
-
--- set listchars=trail:·,nbsp:◇,tab:│\ ,leadmultispace:\┆\ \ \ ,extends:Îõ,precedes:Îõ
--- opt.list = true
--- opt.listchars:append({ trail = "·" })
--- opt.listchars:append({ nbsp = "◇" })
--- opt.listchars:append({ tab = "│ " })
--- opt.listchars:append({ leadmultispace = "┆   " })
--- opt.listchars:append({ extends = "▸" })
--- opt.listchars:append({ precedes = "◂" })
 
 opt.conceallevel = 0
 
@@ -61,6 +52,6 @@ vim.diagnostic.config({
             [vim.diagnostic.severity.HINT] = "",
         },
     },
-    -- virtual_text = true,
-    -- underline = true,
+    virtual_text = true,
+    underline = true,
 })

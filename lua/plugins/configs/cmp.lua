@@ -1,6 +1,9 @@
+dofile(vim.g.base46_cache .. "cmp")
+
 local cmp = require("cmp")
 
-cmp.setup({
+local options = {
+    completion = { completeopt = "menu,menuone" },
     snippet = {
         expand = function(args)
             require("luasnip").lsp_expand(args.body)
@@ -11,7 +14,10 @@ cmp.setup({
         ["<C-f>"] = cmp.mapping.scroll_docs(4),
         ["<C-Space>"] = cmp.mapping.complete(),
         ["<C-e>"] = cmp.mapping.abort(),
-        ["<CR>"] = cmp.mapping.confirm({ select = true }),
+        ["<CR>"] = cmp.mapping.confirm({
+            behavior = cmp.ConfirmBehavior.Insert,
+            select = true,
+        }),
 
         -- luasnip
         ["<Tab>"] = cmp.mapping(function(fallback)
@@ -46,4 +52,6 @@ cmp.setup({
         { name = "nvim_lua" },
         { name = "path" },
     }),
-})
+}
+
+return vim.tbl_deep_extend("force", options, require("nvchad.cmp"))

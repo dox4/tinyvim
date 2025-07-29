@@ -12,91 +12,41 @@ end
 local plugins = {
     { lazy = true, "nvim-lua/plenary.nvim" },
 
-    -- themes
-    { "dracula/vim" },
+    -- NvChad plugins
     {
-        "folke/tokyonight.nvim",
-        lazy = true,
-        opts = {
-            style = (function()
-                if math.random() > 0.5 then
-                    return "moon"
-                else
-                    return "night"
-                end
-            end)(),
-            styles = {
-                comments = { italic = true },
-                transparent = true,
-                sidebars = "transparent",
-                floats = "transparent",
-            },
-        },
-    },
-    {
-        "loctvl842/monokai-pro.nvim",
-        opts = {
-            filter = (function()
-                local filters = {
-                    "classic",
-                    "octagon",
-                    "pro",
-                    "machine",
-                    "ristretto",
-                    "spectrum",
-                }
-                return filters[math.random(#filters)]
-            end)(),
-            transparent_background = true,
-            terminal_colors = true,
-        },
-    },
-    {
-        "navarasu/onedark.nvim",
-        opts = {
-            style = (function()
-                local styles = {
-                    "dark",
-                    "darker",
-                    "cool",
-                    "deep",
-                    "warm",
-                    "warmer",
-                }
-                return styles[math.random(#styles)]
-            end)(),
-            transparent = true,
-            lualine = {
-                transparent = true,
-            },
-        },
-    },
-    {
-        "sainnhe/gruvbox-material",
-        config = function()
-            vim.g.gruvbox_material_enable_italic = true
-            vim.g.gruvbox_material_enable_bold = 1
-            vim.g.gruvbox_material_background = "hard"
-            vim.g.gruvbox_material_transparent_background = 2
-            vim.g.gruvbox_material_ui_contrast = "hight"
-            vim.g.gruvbox_material_better_performance = true
+        "nvchad/base46",
+        build = function()
+            require("base46").load_all_highlights()
         end,
     },
+
+    {
+        "nvchad/ui",
+        lazy = false,
+        config = function()
+            require("nvchad")
+        end,
+    },
+
+    "nvzone/volt",
+    "nvzone/menu",
+    { "nvzone/minty", cmd = { "Huefy", "Shades" } },
 
     -- file tree
     {
         "nvim-tree/nvim-tree.lua",
         cmd = { "NvimTreeToggle", "NvimTreeFocus" },
-        config = function()
-            require("plugins.configs.nvimtree")
+        opts = function()
+            return require("plugins.configs.nvimtree")
         end,
     },
 
     -- icons, for UI related plugins
     {
         "nvim-tree/nvim-web-devicons",
-        config = function()
-            require("nvim-web-devicons").setup()
+        opts = function()
+            dofile(vim.g.base46_cache .. "devicons")
+            return { override = require("nvchad.icons.devicons") }
         end,
     },
 
@@ -104,28 +54,8 @@ local plugins = {
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
-        config = function()
-            require("plugins.configs.treesitter")
-        end,
-    },
-
-    -- buffer + tab line
-    {
-        "akinsho/bufferline.nvim",
-        event = "BufReadPre",
-        config = function()
-            require("plugins.configs.bufferline")
-        end,
-    },
-    {
-        "nvim-lualine/lualine.nvim",
-        dependencies = { "nvim-tree/nvim-web-devicons" },
-        config = function()
-            require("lualine").setup({
-                sections = {
-                    lualine_c = { { "filename", path = 1 } },
-                },
-            })
+        opts = function()
+            return require("plugins.configs.treesitter")
         end,
     },
 
@@ -142,6 +72,7 @@ local plugins = {
             "hrsh7th/cmp-nvim-lsp",
             "saadparwaiz1/cmp_luasnip",
             "hrsh7th/cmp-nvim-lua",
+            "https://codeberg.org/FelipeLema/cmp-async-path.git",
 
             -- snippets
             --list of default snippets
@@ -158,8 +89,12 @@ local plugins = {
             -- autopairs , autocompletes ()[] etc
             {
                 "windwp/nvim-autopairs",
-                config = function()
-                    require("nvim-autopairs").setup()
+                opts = {
+                    fast_wrap = {},
+                    disable_filetype = { "TelescopePrompt", "vim" },
+                },
+                config = function(_, opts)
+                    require("nvim-autopairs").setup(opts)
 
                     --  cmp integration
                     local cmp_autopairs = require("nvim-autopairs.completion.cmp")
@@ -168,15 +103,18 @@ local plugins = {
                 end,
             },
         },
-        config = function()
-            require("plugins.configs.cmp")
+        opts = function()
+            return require("plugins.configs.cmp")
         end,
     },
 
     -- lsp
     {
         "mason-org/mason.nvim",
-        opts = {},
+        opts = function()
+            dofile(vim.g.base46_cache .. "mason")
+            return {}
+        end,
     },
 
     {
@@ -207,7 +145,7 @@ local plugins = {
         cmd = { "ConformInfo" },
         dependencies = { "williamboman/mason.nvim" },
         config = function()
-            local ensure_installed = { "stylua", "prettier", "golines", "goimports", "shfmt" }
+            local ensure_installed = { "prettier", "golines", "goimports", "shfmt" }
             local registry = require("mason-registry")
             for _, name in ipairs(ensure_installed) do
                 local package = registry.get_package(name)
@@ -223,8 +161,18 @@ local plugins = {
     {
         "lukas-reineke/indent-blankline.nvim",
         event = { "BufReadPre", "BufNewFile" },
-        config = function()
-            require("ibl").setup()
+        opts = {
+            indent = { char = "│", highlight = "IblChar" },
+            scope = { char = "│", highlight = "IblScopeChar" },
+        },
+        config = function(_, opts)
+            dofile(vim.g.base46_cache .. "blankline")
+
+            local hooks = require("ibl.hooks")
+            hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
+            require("ibl").setup(opts)
+
+            dofile(vim.g.base46_cache .. "blankline")
         end,
     },
 
@@ -237,10 +185,13 @@ local plugins = {
 
     {
         "nvim-telescope/telescope.nvim",
-        dependencies = { "nvim-lua/plenary.nvim" },
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-treesitter/nvim-treesitter",
+        },
         cmd = "Telescope",
-        config = function()
-            require("plugins.configs.telescope")
+        opts = function()
+            return require("plugins.configs.telescope")
         end,
     },
 
@@ -253,36 +204,25 @@ local plugins = {
         end,
     },
 
-    -- comment plugin
-    {
-        "numToStr/Comment.nvim",
-        lazy = true,
-        config = function()
-            require("Comment").setup()
-        end,
-    },
-
     -- which-key
     {
         "folke/which-key.nvim",
         event = "VeryLazy",
+        keys = { "<leader>", "<c-w>", '"', "'", "`", "c", "v", "g" },
+        cmd = "WhichKey",
         init = function()
             vim.o.timeout = true
             vim.o.timeoutlen = 300
         end,
-        opts = {},
+        opts = function()
+            dofile(vim.g.base46_cache .. "whichkey")
+            return {}
+        end,
         config = function()
             require("which-key").setup()
         end,
     },
-    -- floating terminal
-    {
-        "akinsho/toggleterm.nvim",
-        version = "*",
-        config = function()
-            require("plugins.configs.toggleterm")
-        end,
-    },
+
     -- auto save
     {
         -- lua
@@ -423,7 +363,6 @@ local plugins = {
             "nvim-telescope/telescope.nvim",
         },
         opts = {
-            -- strategy = "toggleterm",
         },
     },
 }

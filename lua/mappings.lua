@@ -32,19 +32,17 @@ map("n", "<leader>ff", "<cmd> Telescope find_files <CR>", { desc = "Telescope fi
 map("n", "<leader>fw", "<cmd> Telescope live_grep <CR>", { desc = "Telescope live_grep" })
 map("n", "<leader>fb", "<cmd> Telescope buffers <CR>", { desc = "Telescope buffers" })
 map("n", "<leader>fd", "<cmd> Telescope diagnostics <CR>", { desc = "Telescope diagnostics" })
--- map("n", "<leader>fo", "<cmd> Telescope oldfiles <CR>")
--- map("n", "<leader>gt", "<cmd> Telescope git_status <CR>")
+map("n", "<leader>ft", function()
+    require("nvchad.themes").open()
+end, { desc = "telescope nvchad themes" })
 
--- bufferline, cycle buffers
-map("n", "<Tab>", "<cmd> BufferLineCycleNext <CR>")
-map("n", "<S-Tab>", "<cmd> BufferLineCyclePrev <CR>")
+map("n", "<Tab>", function()
+    require("nvchad.tabufline").next()
+end, { desc = "buffer goto next" })
 
--- comment.nvim
-map("n", "gcc", function()
-    require("Comment.api").toggle.linewise.current()
-end, { desc = "toggle current commented" })
-
-map("v", "gc", "<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>")
+map("n", "<S-Tab>", function()
+    require("nvchad.tabufline").prev()
+end, { desc = "buffer goto prev" })
 
 -- outline
 map("n", "<leader>a", "<cmd>AerialToggle!<CR>")
@@ -85,26 +83,14 @@ map("n", "<C-s>", "<cmd> write <CR>", { desc = "save file manually" })
 
 -- buffers
 map("n", "<leader>bd", function()
-    local buf = vim.api.nvim_get_current_buf()
-    if #vim.g.buffers_cache > 0 then
-        for i = #vim.g.buffers_cache, 1, -1 do
-            local last_buffer = vim.g.buffers_cache[i]
-            table.remove(vim.g.buffers_cache, i)
-            if vim.api.nvim_buf_is_valid(last_buffer) then
-                vim.notify("set current buffer " .. last_buffer)
-                vim.api.nvim_set_current_buf(last_buffer)
-                break
-            end
-        end
-    end
-    vim.api.nvim_buf_delete(buf, {})
+    require("nvchad.tabufline").close_buffer()
 end, { desc = "delete current buffer" })
 
 -- quit all
 map("n", "<leader>qq", "<cmd> confirm quitall <CR>", { desc = "confirm quit all" })
 
 -- noh 清除匹配高亮
-map("n", "<leader>ch", "<cmd> noh <cr>", { desc = "clear search match highlight" })
+map("n", "<Esc>", "<cmd> noh <cr>", { desc = "clear search match highlight" })
 
 -- overseer
 -- OverseerBuild
@@ -125,3 +111,15 @@ map("n", "<leader>oc", "<cmd> OverseerRunCmd ", { desc = "OverseerRunCmd" })
 -- OverseerTaskAction
 -- OverseerToggle
 map("n", "<leader>ot", "<cmd> OverseerToggle <CR>", { desc = "OverseerToggle" })
+
+map({ "n", "t" }, "<leader>th", function()
+    require("nvchad.term").toggle({ pos = "sp", id = "htoggleTerm" })
+end, { desc = "terminal toggleable horizontal term" })
+
+map({ "n", "t" }, "<leader>tf", function()
+    require("nvchad.term").toggle({ pos = "float", id = "floatTerm" })
+end, { desc = "terminal toggle floating term" })
+
+map("n", "<leader>sf", "<cmd> echo expand('%') <CR>", { desc = "show current file path" })
+map("n", "<leader>cf", "<cmd>%y+<CR>", { desc = "general copy whole file" })
+map("n", "<leader>cp", "<cmd>let @+ = expand('%')<CR>", { desc = "copy relative path of current file." })

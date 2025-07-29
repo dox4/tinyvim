@@ -1,3 +1,4 @@
+dofile(vim.g.base46_cache .. "git")
 require("gitsigns").setup({
     auto_attach = true,
     attach_to_untracked = true,
