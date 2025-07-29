@@ -117,7 +117,18 @@ map({ "n", "t" }, "<leader>th", function()
 end, { desc = "terminal toggleable horizontal term" })
 
 map({ "n", "t" }, "<leader>tf", function()
-    require("nvchad.term").toggle({ pos = "float", id = "floatTerm" })
+    require("nvchad.term").toggle({
+        pos = "float",
+        id = "floatTerm",
+        float_opts = {
+            width = 0.9,
+            height = 0.8,
+            row = 0.08,
+            col = 0.05,
+            title = "Run Something",
+            title_pos = "right",
+        },
+    })
 end, { desc = "terminal toggle floating term" })
 
 map("n", "<leader>sf", "<cmd> echo expand('%') <CR>", { desc = "show current file path" })
