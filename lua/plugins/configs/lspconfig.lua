@@ -1,13 +1,3 @@
--- Global mappings.
--- vim.keymap.set("n", "<space>e", vim.diagnostic.open_float)
-vim.keymap.set("n", "[d", function()
-    vim.diagnostic.jump({ count = -1, float = true })
-end)
-vim.keymap.set("n", "]d", function()
-    vim.diagnostic.jump({ count = 1 , float = true, virtual_text = true})
-end)
--- vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist)
-
 -- Use LspAttach autocommand to only map the following keys
 vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup("UserLspConfig", {}),
@@ -71,237 +61,30 @@ capabilities.textDocument.completion.completionItem = {
     },
 }
 
-vim.lsp.config("lua_ls", {
-    capabilities = capabilities,
-    settings = {
-        Lua = {
-            diagnostics = { globals = { "vim" } },
-        },
-    },
-})
+local vue_config = require("plugins.configs.lspconfigs.vue")
 
-vim.lsp.config("gopls", {
-    capabilities = capabilities,
-    settings = {
-        gopls = {
-            gofumpt = true,
-            hints = {
-                assignVariableTypes = true,
-                compositeLiteralFields = true,
-                compositeLiteralTypes = true,
-                constantValues = true,
-                functionTypeParameters = true,
-                parameterNames = true,
-                rangeVariableTypes = true,
-            },
-            analyses = {
-                inlines = true,
-                unusedparams = true,
-                unusedwrite = true,
-                useany = true,
-            },
-            usePlaceholders = true,
-            completeUnimported = true,
-            directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
-            semanticTokens = true,
-            staticcheck = (function()
-                local go_version = (function()
-                    if vim.loop.os_uname().sysname == "Windows_NT" then
-                        return vim.fn.system("go version")
-                    else
-                        local path = vim.fn.getenv("PATH")
-                        return vim.fn.system("PATH=" .. path .. " go version")
-                    end
-                end)()
-                local captured_version = string.match(go_version, "go(%d+.%d+.%d+)")
-                return captured_version and captured_version > "1.18.10"
-            end)(),
-        },
-    },
-})
-vim.lsp.enable("gopls")
-
-vim.lsp.config("rust_analyzer", {
-    capabilities = capabilities,
-    settings = {
-        ["rust-analyzer"] = {
-            cargo = {
-                allFeatures = true,
-                loadOutDirsFromCheck = true,
-                runBuildScripts = true,
-            },
-            -- Add clippy lints for Rust.
-            checkOnSave = {
-                allFeatures = true,
-                command = "clippy",
-                extraArgs = { "--no-deps" },
-            },
-            procMacro = {
-                enable = true,
-                ignored = {
-                    ["async-trait"] = { "async_trait" },
-                    ["napi-derive"] = { "napi" },
-                    ["async-recursion"] = { "async_recursion" },
-                },
-            },
-        },
-    },
-})
-
-vim.lsp.config("ruff", {
-    capabilities = capabilities,
-    on_attach = function(client, _)
-        -- Disable hover in favor of Pyright
-        client.server_capabilities.hoverProvider = false
-    end,
-    init_options = {
+local settings = {
+    ["basedpyright"] = {},
+    ["bashls"] = {},
+    ["clangd"] = {},
+    ["gopls"] = require("plugins.configs.lspconfigs.gopls"),
+    ["lua_ls"] = {
         settings = {
-            format = {
-                args = {
-                    "--line-length",
-                    "120",
-                },
-            },
-            args = {},
-        },
-    },
-})
-vim.lsp.config("basedpyright", {
-    capabilities = capabilities,
-})
-
-vim.lsp.enable({ "ruff", "basedpyright" })
-
-vim.lsp.config("clangd", {
-    capabilities = capabilities,
-})
-
-vim.lsp.enable("bashls")
-vim.lsp.config("bashls", {
-    capabilities = capabilities,
-})
-
--- For Mason v2,
-local vue_language_server_path = vim.fn.expand("$MASON/packages")
-    .. "/vue-language-server"
-    .. "/node_modules/@vue/language-server"
--- or even
--- local vue_language_server_path = vim.fn.stdpath('data') .. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
-local vue_plugin = {
-    name = "@vue/typescript-plugin",
-    location = vue_language_server_path,
-    languages = { "vue" },
-    configNamespace = "typescript",
-}
-local vtsls_config = {
-    settings = {
-        vtsls = {
-            tsserver = {
-                globalPlugins = {
-                    vue_plugin,
-                },
-            },
-        },
-        typescript = {
-            updateImportsOnFileMove = { enabled = "always" },
-            suggest = {
-                completeFunctionCalls = true,
-            },
-            -- inlayHints = {
-            --     enumMemberValues = { enabled = true },
-            --     functionLikeReturnTypes = { enabled = true },
-            --     parameterNames = { enabled = "literals" },
-            --     parameterTypes = { enabled = true },
-            --     propertyDeclarationTypes = { enabled = true },
-            --     variableTypes = { enabled = true },
-            -- },
-            preferences = {
-                importModuleSpecifier = "non-relative",
-                quoteStyle = "double",
-            },
-            format = {
-                semicolons = "remove",
+            Lua = {
+                diagnostics = { globals = { "vim" } },
             },
         },
     },
-    filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+    ["ruff"] = require("plugins.configs.lspconfigs.ruff"),
+    ["rust_analyzer"] = require("plugins.configs.lspconfigs.rust_analyzer"),
+    ["vue_ls"] = vue_config[1],
+    ["vtsls"] = vue_config[2],
 }
--- local vtsls_config = {
---     init_options = {
---         plugins = {
---             vue_plugin,
---         },
---     },
---     filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
---     settings = {
---         complete_function_calls = true,
---         vtsls = {
---             enableMoveToFileCodeAction = true,
---             autoUseWorkspaceTsdk = true,
---             experimental = {
---                 maxInlayHintLength = 30,
---                 completion = {
---                     enableServerSideFuzzyMatch = true,
---                 },
---             },
---         },
---         typescript = {
---             updateImportsOnFileMove = { enabled = "always" },
---             suggest = {
---                 completeFunctionCalls = true,
---             },
---             inlayHints = {
---                 enumMemberValues = { enabled = true },
---                 functionLikeReturnTypes = { enabled = true },
---                 parameterNames = { enabled = "literals" },
---                 parameterTypes = { enabled = true },
---                 propertyDeclarationTypes = { enabled = true },
---                 variableTypes = { enabled = true },
---             },
---             preferences = {
---                 quoteStyle = "double",
---             },
---         },
---     },
--- }
-local vue_ls_config = {
-    filetypes = { "vue" },
-    on_init = function(client)
-        client.handlers["tsserver/request"] = function(_, result, context)
-            local clients = vim.lsp.get_clients({ bufnr = context.bufnr, name = "vtsls" })
-            if #clients == 0 then
-                vim.notify(
-                    "Could not found `vtsls` lsp client, vue_lsp would not work without it.",
-                    vim.log.levels.ERROR
-                )
-                return
-            end
-            local ts_client = clients[1]
 
-            local param = unpack(result)
-            local id, command, payload = unpack(param)
-            ts_client:exec_cmd({
-                command = "typescript.tsserverRequest",
-                arguments = {
-                    command,
-                    payload,
-                },
-            }, { bufnr = context.bufnr }, function(_, r)
-                local response_data = { { id, r.body } }
-                ---@diagnostic disable-next-line: param-type-mismatch
-                client:notify("tsserver/response", response_data)
-            end)
-        end
-    end,
-    init_options = {
-        vue = {
-            hybridMode = false,
-        },
-    },
-}
--- nvim 0.11 or above
-vim.lsp.config("vtsls", vtsls_config)
-vim.lsp.config("vue_ls", vue_ls_config)
-vim.lsp.enable({ "vtsls", "vue_ls" })
-vim.lsp.config("eslint", {})
-
+for server, configs in pairs(settings) do
+    if configs.capabilities == nil then
+        configs.capabilities = capabilities
+    end
+    vim.lsp.config(server, configs)
+    vim.lsp.enable(server)
+end

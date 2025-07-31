@@ -8,8 +8,6 @@ vim.g.mapleader = " "
 opt.laststatus = 3 -- global statusline
 -- opt.showmode = false
 opt.autowrite = true
--- opt.clipboard = "unnamedplus"
-vim.cmd("set clipboard=unnamedplus")
 
 opt.colorcolumn = "120" -- set ruler
 opt.mouse = "" -- disable mouse
@@ -27,6 +25,7 @@ opt.confirm = true -- Confirm to save changes before exiting modified buffer
 opt.cursorline = true -- Enable highlighting of the current line
 opt.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
 opt.termguicolors = true -- True color support
+opt.background = "dark"
 opt.timeoutlen = 300
 opt.undofile = true
 opt.undolevels = 10000
@@ -34,6 +33,26 @@ opt.updatetime = 200 -- Save swap file and trigger CursorHold
 opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 opt.wildmode = "longest:full,full" -- Command-line completion mode
 opt.wrap = false -- Disable line wrap
+
+local o = vim.o
+
+o.showmode = false
+o.splitkeep = "screen"
+
+o.clipboard = "unnamedplus"
+
+opt.fillchars = { eob = " " }
+o.ignorecase = true
+o.smartcase = true
+
+opt.shortmess:append("sI")
+
+o.splitbelow = true
+o.splitright = true
+
+-- go to previous/next line with h,l,left arrow and right arrow
+-- when cursor reaches end/beginning of line
+opt.whichwrap:append("<>[]hl")
 
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0

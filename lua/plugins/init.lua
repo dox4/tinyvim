@@ -54,8 +54,23 @@ local plugins = {
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
-        opts = function()
-            return require("plugins.configs.treesitter")
+        -- treesitter require config() to setup rather than opts
+        config = function()
+            pcall(function()
+                dofile(vim.g.base46_cache .. "syntax")
+                dofile(vim.g.base46_cache .. "treesitter")
+            end)
+
+            require("nvim-treesitter.configs").setup({
+                ensure_installed = { "lua", "go", "python", "rust" },
+
+                highlight = {
+                    enable = true,
+                    use_languagetree = true,
+                },
+
+                indent = { enable = true },
+            })
         end,
     },
 
@@ -362,7 +377,16 @@ local plugins = {
         dependencies = {
             "nvim-telescope/telescope.nvim",
         },
+        opts = {},
+    },
+    -- comment plugin enable auto comment for nested typescript/css in .vue file
+    {
+        "JoosepAlviste/nvim-ts-context-commentstring",
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter",
+        },
         opts = {
+            enable_autocmd = false,
         },
     },
 }
