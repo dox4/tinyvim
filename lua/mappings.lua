@@ -106,7 +106,6 @@ map("n", "<leader>oo", "<cmd> OverseerOpen <CR>", { desc = "OverseerOpen" })
 -- OverseerRun
 map("n", "<leader>or", "<cmd> OverseerRun <CR>", { desc = "OverseerRun" })
 -- OverseerRunCmd
-map("n", "<leader>oc", "<cmd> OverseerRunCmd ", { desc = "OverseerRunCmd" })
 -- OverseerSaveBundle
 -- OverseerTaskAction
 -- OverseerToggle

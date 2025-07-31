@@ -74,55 +74,31 @@ local plugins = {
         end,
     },
 
-    -- we use cmp plugin only when in insert mode
-    -- so lets lazyload it at InsertEnter event, to know all the events check h-events
-    -- completion , now all of these plugins are dependent on cmp, we load them after cmp
     {
-        "hrsh7th/nvim-cmp",
-        event = "InsertEnter",
-        dependencies = {
-            -- cmp sources
-            "hrsh7th/cmp-buffer",
-            "hrsh7th/cmp-path",
-            "hrsh7th/cmp-nvim-lsp",
-            "saadparwaiz1/cmp_luasnip",
-            "hrsh7th/cmp-nvim-lua",
-            "https://codeberg.org/FelipeLema/cmp-async-path.git",
-
-            -- snippets
-            --list of default snippets
-            "rafamadriz/friendly-snippets",
-
-            -- snippets engine
-            {
-                "L3MON4D3/LuaSnip",
-                config = function()
-                    require("luasnip.loaders.from_vscode").lazy_load()
-                end,
-            },
-
-            -- autopairs , autocompletes ()[] etc
-            {
-                "windwp/nvim-autopairs",
-                opts = {
-                    fast_wrap = {},
-                    disable_filetype = { "TelescopePrompt", "vim" },
-                },
-                config = function(_, opts)
-                    require("nvim-autopairs").setup(opts)
-
-                    --  cmp integration
-                    local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-                    local cmp = require("cmp")
-                    cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
-                end,
-            },
+        "windwp/nvim-autopairs",
+        opts = {
+            fast_wrap = {},
+            disable_filetype = { "TelescopePrompt", "vim" },
         },
+    },
+    {
+        "saghen/blink.compat",
+        -- use v2.* for blink.cmp v1.*
+        version = "2.*",
+        -- lazy.nvim will automatically load the plugin when it's required by blink.cmp
+        lazy = true,
+        -- make sure to set opts so that lazy.nvim calls blink.compat's setup
+        opts = {},
+    },
+    {
+        "saghen/blink.cmp",
+        dependencies = { "rafamadriz/friendly-snippets", "xieyonn/blink-cmp-dat-word", "xzbdmw/colorful-menu.nvim" },
+        version = "1.*",
+        opts_extend = { "sources.default" },
         opts = function()
-            return require("plugins.configs.cmp")
+            return require("plugins.configs.blink")
         end,
     },
-
     -- lsp
     {
         "mason-org/mason.nvim",
@@ -147,6 +123,7 @@ local plugins = {
     {
         "neovim/nvim-lspconfig",
         event = { "BufReadPre", "BufNewFile" },
+        dependencies = { "saghen/blink.cmp" },
         config = function()
             require("plugins.configs.lspconfig")
         end,
@@ -203,10 +180,16 @@ local plugins = {
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-treesitter/nvim-treesitter",
+            "nvim-telescope/telescope-ui-select.nvim",
         },
         cmd = "Telescope",
         opts = function()
             return require("plugins.configs.telescope")
+        end,
+        config = function(_, opts)
+            local telescope = require("telescope")
+            telescope.setup(opts)
+            telescope.load_extension("ui-select")
         end,
     },
 
@@ -389,6 +372,63 @@ local plugins = {
             enable_autocmd = false,
         },
     },
+    {
+        "olimorris/codecompanion.nvim",
+        opts = {
+            adapters = {
+                http = {
+                    siliconflow_r1 = function()
+                        return require("codecompanion.adapters").extend("deepseek", {
+                            name = "siliconflow_r1",
+                            url = "https://api.siliconflow.cn/v1/chat/completions",
+                            env = {
+                                api_key = "DEEPSEEK_API_KEY",
+                            },
+                            schema = {
+                                model = {
+                                    default = "deepseek-ai/DeepSeek-R1-0528-Qwen3-8B",
+                                    choices = {
+                                        ["deepseek-ai/DeepSeek-R1-0528-Qwen3-8B"] = { opts = { can_reason = true } },
+                                        "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+                                    },
+                                },
+                            },
+                        })
+                    end,
+                },
+            },
+            strategies = {
+                -- Change the default chat adapter
+                chat = {
+                    adapter = "siliconflow_r1",
+                },
+                inline = {
+                    adapter = "siliconflow_r1",
+                },
+            },
+            opts = {
+                -- Set debug logging
+                log_level = "DEBUG",
+                language = "Chinese",
+            },
+        },
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-treesitter/nvim-treesitter",
+        },
+    },
 }
+
+if require("inneroptions").enable_inner_options() then
+    table.insert(
+        plugins, -- condeverse
+        {
+            require("inneroptions").get_inner_plugin_url(),
+            config = function()
+                require("trae").setup({})
+            end,
+        }
+    )
+end
 
 require("lazy").setup(plugins, require("plugins.configs.lazy"))

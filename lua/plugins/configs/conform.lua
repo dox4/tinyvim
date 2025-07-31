@@ -1,4 +1,6 @@
 require("conform").setup({
+    log_level = vim.log.levels.DEBUG,
+
     formatters_by_ft = {
         lua = { "stylua" },
         go = { "gofmt", "golines" },
@@ -8,7 +10,10 @@ require("conform").setup({
         vue = { "prettier" },
         typescript = { "prettier" },
         javascript = { "prettier" },
+        ps = { "prettier" },
+        typescriptreact = { "prettier" },
         html = { "prettier" },
+        yaml = { "yamlfmt" },
         python = function(_)
             -- 定位 pyproject.toml
             local root = vim.fn.getcwd()
@@ -46,11 +51,26 @@ require("conform").setup({
             return #formatters > 0 and formatters or default_formatters
         end,
         toml = { "taplo" },
+        sql = { "sql_formatter" },
+        terraform = { "terraform_fmt" },
+        ocaml = { "ocamlformat" },
     },
     formatters = {
         prettier = {
             inherit = true,
             prepend_args = function(_, ctx)
+                local buf = ctx.buf
+                local ft = vim.api.nvim_buf_get_option(buf, "filetype")
+                local function extend(t1, t2)
+                    for _, value in ipairs(t2) do
+                        table.insert(t1, value)
+                    end
+                    return t1
+                end
+                local args = {}
+                if ft == "json" then
+                    args = { "--parser", "json" }
+                end
                 local cmd = "prettier --find-config-path " .. ctx.filename
                 local prettierrc = vim.fn.system(cmd)
                 if vim.v.shell_error == 0 then
@@ -58,9 +78,9 @@ require("conform").setup({
                         return s:match("^%s*(.-)%s*$")
                     end
                     prettierrc = trim(prettierrc)
-                    return { "--config", prettierrc }
+                    return extend(args, { "--config", prettierrc })
                 end
-                return { "--tab-width", "4" }
+                return extend(args, { "--tab-width", "4" })
             end,
         },
 
@@ -83,5 +103,10 @@ require("conform").setup({
         taplo = {},
 
         black = {},
+
+        sql_formatter = {},
+
+        terraform_fmt = {},
+        ocamlformat = {},
     },
 })

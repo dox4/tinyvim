@@ -42,6 +42,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
 
 capabilities.textDocument.completion.completionItem = {
     documentationFormat = { "markdown", "plaintext" },
@@ -64,7 +65,15 @@ capabilities.textDocument.completion.completionItem = {
 local vue_config = require("plugins.configs.lspconfigs.vue")
 
 local settings = {
-    ["basedpyright"] = {},
+    ["basedpyright"] = {
+        settings = {
+            basedpyright = {
+                analysis = {
+                    typeCheckingMode = "standard",
+                },
+            },
+        },
+    },
     ["bashls"] = {},
     ["clangd"] = {},
     ["gopls"] = require("plugins.configs.lspconfigs.gopls"),
@@ -79,6 +88,7 @@ local settings = {
     ["rust_analyzer"] = require("plugins.configs.lspconfigs.rust_analyzer"),
     ["vue_ls"] = vue_config[1],
     ["vtsls"] = vue_config[2],
+    ["ocamllsp"] = {},
 }
 
 for server, configs in pairs(settings) do
