@@ -22,3 +22,6 @@ require("plugins")
 
 dofile(vim.g.base46_cache .. "defaults")
 dofile(vim.g.base46_cache .. "statusline")
+
+-- load inner plugins at end
+require("inneroptions").setup()

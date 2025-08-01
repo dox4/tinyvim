@@ -122,6 +122,17 @@ local plugins = {
             return require("plugins.configs.cmp")
         end,
     },
+    -- condeverse
+    {
+        "https://code.byted.org/chenjiaqi.cposture/codeverse.vim.git",
+        enable = require("inneroptions").enable_inner_options(),
+        dependencies = {
+            "hrsh7th/nvim-cmp",
+        },
+        config = function()
+            require("trae").setup({})
+        end,
+    },
 
     -- lsp
     {
@@ -203,10 +214,16 @@ local plugins = {
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-treesitter/nvim-treesitter",
+            "nvim-telescope/telescope-ui-select.nvim",
         },
         cmd = "Telescope",
         opts = function()
             return require("plugins.configs.telescope")
+        end,
+        config = function(_, opts)
+            local telescope = require("telescope")
+            telescope.setup(opts)
+            telescope.load_extension("ui-select")
         end,
     },
 

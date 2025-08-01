@@ -2,6 +2,17 @@ dofile(vim.g.base46_cache .. "cmp")
 
 local cmp = require("cmp")
 
+local sources = {
+    { name = "nvim_lsp" },
+    { name = "luasnip" },
+    { name = "buffer" },
+    { name = "nvim_lua" },
+    { name = "path" },
+}
+if require("inneroptions").enable_inner_options() then
+    table.insert(sources, { name = "trae" })
+end
+
 local options = {
     completion = { completeopt = "menu,menuone" },
     snippet = {
@@ -45,13 +56,14 @@ local options = {
             "s",
         }),
     }),
-    sources = cmp.config.sources({
-        { name = "nvim_lsp" },
-        { name = "luasnip" },
-        { name = "buffer" },
-        { name = "nvim_lua" },
-        { name = "path" },
-    }),
+    sources = cmp.config.sources(sources),
+    experimental = {
+        -- 开启虚拟文本
+        ghost_text = true,
+    },
+    performance = {
+        debounce = 1000,
+    },
 }
 
 return vim.tbl_deep_extend("force", options, require("nvchad.cmp"))
