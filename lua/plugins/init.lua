@@ -203,10 +203,16 @@ local plugins = {
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-treesitter/nvim-treesitter",
+            "nvim-telescope/telescope-ui-select.nvim",
         },
         cmd = "Telescope",
         opts = function()
             return require("plugins.configs.telescope")
+        end,
+        config = function(_, opts)
+            local telescope = require("telescope")
+            telescope.setup(opts)
+            telescope.load_extension("ui-select")
         end,
     },
 
