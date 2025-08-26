@@ -14,7 +14,6 @@ require("conform").setup({
         typescriptreact = { "prettier" },
         html = { "prettier" },
         yaml = { "yamlfmt" },
-        ocaml = { "ocamlformat" },
         python = function(_)
             -- 定位 pyproject.toml
             local root = vim.fn.getcwd()

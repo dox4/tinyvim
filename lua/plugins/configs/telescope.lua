@@ -29,8 +29,7 @@ return {
             -- the default case_mode is "smart_case"
         },
         ["ui-select"] = {
-            require("telescope.themes").get_dropdown({
-            }),
+            require("telescope.themes").get_dropdown({}),
         },
     },
 }
