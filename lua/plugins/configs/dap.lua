@@ -42,21 +42,40 @@ dap.configurations.go = {
 
 -- Python
 
--- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#python
+local function get_system_python()
+    -- 尝试不同的 Python 命令
+    local commands = { "python3", "python" }
 
-local function python_exec()
-    -- debugpy supports launching an application with a different interpreter then the one used to launch debugpy itself.
-    -- The code below looks for a `venv` or `.venv` folder in the current directly and uses the python within.
-    -- You could adapt this - to for example use the `VIRTUAL_ENV` environment variable.
-    local cwd = vim.fn.getcwd()
-    if vim.fn.executable(cwd .. "/venv/bin/python") == 1 then
-        return cwd .. "/venv/bin/python"
-    elseif vim.fn.executable(cwd .. "/.venv/bin/python") == 1 then
-        return cwd .. "/.venv/bin/python"
-    else
-        return "python"
+    for _, cmd in ipairs(commands) do
+        local path = vim.fn.exepath(cmd)
+        if path ~= "" then
+            return path
+        end
     end
+
+    return vim.fn.has("win32") == 1 and "python.exe" or "python3"
 end
+
+local function find_python_path()
+    local cwd = vim.fn.getcwd()
+    local venv_path = cwd .. "/.venv"
+
+    if vim.fn.isdirectory(venv_path) == 1 then
+        local python_executable
+        if vim.fn.has("win32") == 1 then
+            python_executable = venv_path .. "\\Scripts\\python.exe"
+        else
+            python_executable = venv_path .. "/bin/python"
+        end
+
+        if vim.fn.filereadable(python_executable) == 1 then
+            return python_executable
+        end
+    end
+
+    return get_system_python()
+end
+
 dap.adapters.python = function(cb, config)
     if config.request == "attach" then
         ---@diagnostic disable-next-line: undefined-field
@@ -74,7 +93,7 @@ dap.adapters.python = function(cb, config)
     else
         cb({
             type = "executable",
-            command = python_exec(),
+            command = find_python_path(),
             args = { "-m", "debugpy.adapter" },
             options = {
                 source_filetype = "python",

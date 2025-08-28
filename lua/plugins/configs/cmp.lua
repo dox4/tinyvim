@@ -3,6 +3,7 @@ dofile(vim.g.base46_cache .. "cmp")
 local cmp = require("cmp")
 
 local sources = {
+    { name = "codecompanion" },
     { name = "nvim_lsp" },
     { name = "luasnip" },
     { name = "buffer" },

@@ -122,18 +122,6 @@ local plugins = {
             return require("plugins.configs.cmp")
         end,
     },
-    -- condeverse
-    {
-        "https://code.byted.org/chenjiaqi.cposture/codeverse.vim.git",
-        enable = require("inneroptions").enable_inner_options(),
-        dependencies = {
-            "hrsh7th/nvim-cmp",
-        },
-        config = function()
-            require("trae").setup({})
-        end,
-    },
-
     -- lsp
     {
         "mason-org/mason.nvim",
@@ -406,6 +394,66 @@ local plugins = {
             enable_autocmd = false,
         },
     },
+    {
+        "olimorris/codecompanion.nvim",
+        opts = {
+            adapters = {
+                http = {
+                    siliconflow_r1 = function()
+                        return require("codecompanion.adapters").extend("deepseek", {
+                            name = "siliconflow_r1",
+                            url = "https://api.siliconflow.cn/v1/chat/completions",
+                            env = {
+                                api_key = "DEEPSEEK_API_KEY",
+                            },
+                            schema = {
+                                model = {
+                                    default = "deepseek-ai/DeepSeek-R1-0528-Qwen3-8B",
+                                    choices = {
+                                        ["deepseek-ai/DeepSeek-R1-0528-Qwen3-8B"] = { opts = { can_reason = true } },
+                                        "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+                                    },
+                                },
+                            },
+                        })
+                    end,
+                },
+            },
+            strategies = {
+                -- Change the default chat adapter
+                chat = {
+                    adapter = "siliconflow_r1",
+                },
+                inline = {
+                    adapter = "siliconflow_r1",
+                },
+            },
+            opts = {
+                -- Set debug logging
+                log_level = "DEBUG",
+                language = "Chinese",
+            },
+        },
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-treesitter/nvim-treesitter",
+        },
+    },
 }
+
+if require("inneroptions").enable_inner_options() then
+    table.insert(
+        plugins, -- condeverse
+        {
+            "https://code.byted.org/chenjiaqi.cposture/codeverse.vim.git",
+            dependencies = {
+                "hrsh7th/nvim-cmp",
+            },
+            config = function()
+                require("trae").setup({})
+            end,
+        }
+    )
+end
 
 require("lazy").setup(plugins, require("plugins.configs.lazy"))
