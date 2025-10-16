@@ -2,12 +2,8 @@ local opts = {
     keymap = {
         preset = "enter",
 
-        ["<Tab>"] = {
-            "select_next",
-            "fallback",
-        },
-        -- Navigate to the previous suggestion or cancel completion if currently on the first one.
-        ["<S-Tab>"] = { "select_prev", "fallback" },
+        ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
+        ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
     },
     sources = {
         -- `lsp`, `buffer`, `snippets`, `path` and `omni` are built-in
