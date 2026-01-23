@@ -44,7 +44,7 @@ dap.configurations.go = {
 
 local function get_system_python()
     -- 尝试不同的 Python 命令
-    local commands = { "python3", "python" }
+    local commands = {  "python" }
 
     for _, cmd in ipairs(commands) do
         local path = vim.fn.exepath(cmd)

@@ -261,7 +261,7 @@ local plugins = {
         desc = "Debugging support. Requires language specific adapters to be configured. (see lang extras in LazyVim)",
 
         dependencies = {
-            "rcarriga/nvim-dap-ui",
+            -- "rcarriga/nvim-dap-ui",
             -- virtual text for the debugger
             {
                 "theHamsta/nvim-dap-virtual-text",
@@ -303,57 +303,11 @@ local plugins = {
             require("plugins.configs.dap")
         end,
     },
-
-    -- fancy UI for the debugger
     {
-        "rcarriga/nvim-dap-ui",
-        dependencies = { "nvim-neotest/nvim-nio" },
-    	-- stylua: ignore
-    	keys = {
-    	    { "<leader>du", function() require("dapui").toggle({ }) end, desc = "Dap UI" },
-    	    { "<leader>de", function() require("dapui").eval() end, desc = "Eval", mode = {"n", "v"} },
-    	},
-        opts = {
-            layouts = {
-                {
-                    -- You can change the order of elements in the sidebar
-                    elements = {
-                        -- Provide IDs as strings or tables with "id" and "size" keys
-                        {
-                            id = "scopes",
-                            size = 0.25, -- Can be float or integer > 1
-                        },
-                        { id = "breakpoints", size = 0.25 },
-                        { id = "stacks", size = 0.25 },
-                        { id = "watches", size = 0.25 },
-                    },
-                    size = 40,
-                    position = "right", -- Can be "left" or "right"
-                },
-                {
-                    elements = {
-                        "repl",
-                        "console",
-                    },
-                    size = 10,
-                    position = "bottom", -- Can be "bottom" or "top"
-                },
-            },
-        },
-        config = function(_, opts)
-            local dap = require("dap")
-            local dapui = require("dapui")
-            dapui.setup(opts)
-            dap.listeners.after.event_initialized["dapui_config"] = function()
-                dapui.open({})
-            end
-            dap.listeners.before.event_terminated["dapui_config"] = function()
-                dapui.close({})
-            end
-            dap.listeners.before.event_exited["dapui_config"] = function()
-                dapui.close({})
-            end
-        end,
+        "igorlfs/nvim-dap-view",
+        ---@module 'dap-view'
+        ---@type dapview.Config
+        opts = {},
     },
     {
         "stevearc/overseer.nvim",
@@ -415,6 +369,17 @@ local plugins = {
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-treesitter/nvim-treesitter",
+        },
+    },
+    {
+        "xiyaowong/transparent.nvim",
+        lazy = false,
+        opts = {
+            extra_groups = {
+                "NormalFloat", -- plugins which have float panel such as Lazy, Mason, LspInfo
+                "NvimTreeNormal", -- NvimTree lost focus
+                "NvimTreeNormalNC", -- NvimTree focus
+            },
         },
     },
 }
