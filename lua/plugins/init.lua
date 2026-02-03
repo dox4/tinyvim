@@ -382,6 +382,105 @@ local plugins = {
             },
         },
     },
+    {
+        "folke/sidekick.nvim",
+        event = "VeryLazy",
+        opts = {
+            -- -- 仅使用 CLI 功能，禁用 NES
+            -- nes = { enabled = false },
+            cli = {
+                tools = {
+                    coco = {
+                        cmd = { "coco" },
+                        title = "Coco AI",
+                    },
+                },
+            },
+        },
+        keys = {
+            {
+                "<leader>aa",
+                function()
+                    require("sidekick.cli").toggle()
+                end,
+                desc = "Sidekick Toggle CLI",
+            },
+            {
+                "<leader>as",
+                function()
+                    require("sidekick.cli").select()
+                end,
+                -- Or to select only installed tools:
+                -- require("sidekick.cli").select({ filter = { installed = true } })
+                desc = "Select CLI",
+            },
+            {
+                "<leader>ad",
+                function()
+                    require("sidekick.cli").close()
+                end,
+                desc = "Detach a CLI Session",
+            },
+            {
+                "<leader>at",
+                function()
+                    require("sidekick.cli").send({ msg = "{this}" })
+                end,
+                mode = { "x", "n" },
+                desc = "Send This",
+            },
+            {
+                "<leader>af",
+                function()
+                    require("sidekick.cli").send({ msg = "{file}" })
+                end,
+                desc = "Send File",
+            },
+            {
+                "<leader>av",
+                function()
+                    require("sidekick.cli").send({ msg = "{selection}" })
+                end,
+                mode = { "x" },
+                desc = "Send Visual Selection",
+            },
+            {
+                "<leader>ap",
+                function()
+                    require("sidekick.cli").prompt()
+                end,
+                mode = { "n", "x" },
+                desc = "Sidekick Select Prompt",
+            },
+            -- Example of a keybinding to open Claude directly
+            {
+                "<leader>ac",
+                function()
+                    require("sidekick.cli").toggle({ name = "coco", focus = true })
+                end,
+                desc = "Sidekick Toggle Coco, aka trae-cli",
+            },
+        },
+    },
+    {
+        "nvim-pack/nvim-spectre",
+        dependencies = { "nvim-lua/plenary.nvim" }, -- 基础依赖，几乎所有nvim插件都有
+        keys = { -- 配置快捷键，开箱即用
+            { "<leader>ss", "<cmd>lua require('spectre').open()<CR>", desc = "全局替换-打开面板" },
+            {
+                "<leader>sw",
+                "<cmd>lua require('spectre').open_visual({select_word=true})<CR>",
+                desc = "全局替换-匹配当前单词",
+            },
+        },
+        config = function()
+            require("spectre").setup({
+                open_cmd = "vnew", -- 垂直分屏打开预览面板（默认，推荐）
+                live_update = true, -- 实时预览替换结果（核心功能，必开）
+                is_insert_mode = true, -- 打开面板后默认进入插入模式，直接输入搜索内容
+            })
+        end,
+    },
 }
 
 if require("inneroptions").enable_inner_options() then

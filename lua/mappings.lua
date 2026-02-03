@@ -11,7 +11,7 @@ map("n", "<C-k>", "<cmd>wincmd k<cr>", { desc = "Go to upper window" })
 map("n", "<C-l>", "<cmd>wincmd l<cr>", { desc = "Go to right window" })
 
 -- nvimtree
-map("n", "<space>e", "<cmd> NvimTreeToggle <CR>")
+map("n", "<leader>e", "<cmd> NvimTreeToggle <CR>")
 -- map("n", "<C-h>", "<cmd> NvimTreeFocus <CR>")
 
 local expand_nvim_tree = false
@@ -140,4 +140,4 @@ end, { desc = "go to previous diagnostic" })
 map("n", "]d", function()
     vim.diagnostic.jump({ count = 1, float = true, virtual_text = true })
 end, { desc = "go to next diagnostic" })
--- vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist)
+-- vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist)

@@ -3,7 +3,7 @@ vim.g.base46_cache = vim.fn.stdpath("data") .. "/base46/"
 local opt = vim.opt
 
 vim.g.autoformat = false
-vim.g.mapleader = " "
+vim.g.mapleader = "\\"
 
 opt.laststatus = 3 -- global statusline
 -- opt.showmode = false

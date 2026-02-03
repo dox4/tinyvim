@@ -20,21 +20,21 @@ vim.api.nvim_create_autocmd("LspAttach", {
         end, { buffer = ev.buf, desc = "telescope.builtin lsp_implementations" })
         vim.keymap.set("n", "gK", vim.lsp.buf.signature_help, { buffer = ev.buf, desc = "lsp signature_help" })
 
-        -- vim.keymap.set("n", "<space>wa", vim.lsp.buf.add_workspace_folder, opts)
-        -- vim.keymap.set("n", "<space>wr", vim.lsp.buf.remove_workspace_folder, opts)
-        -- vim.keymap.set("n", "<space>wl", function()
+        -- vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
+        -- vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
+        -- vim.keymap.set("n", "<leader>wl", function()
         --     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
         -- end, opts)
-        vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, { buffer = ev.buf, desc = "lsp type_definition" })
-        vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, { buffer = ev.buf, desc = "lsp rename" })
+        vim.keymap.set("n", "<leader>D", vim.lsp.buf.type_definition, { buffer = ev.buf, desc = "lsp type_definition" })
+        vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { buffer = ev.buf, desc = "lsp rename" })
         vim.keymap.set(
             { "n", "v" },
-            "<space>ca",
+            "<leader>ca",
             vim.lsp.buf.code_action,
             { buffer = ev.buf, desc = "lsp code_action" }
         )
         -- vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-        -- vim.keymap.set("n", "<space>f", function()
+        -- vim.keymap.set("n", "<leader>f", function()
         --   vim.lsp.buf.format { async = true }
         -- end, opts)
         vim.lsp.inlay_hint.enable(true)
