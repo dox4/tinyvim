@@ -310,11 +310,24 @@ local plugins = {
         opts = {},
     },
     {
+        "ellisonleao/dotenv.nvim",
+        opts = {
+            enable_on_load = true, -- will load your .env file upon loading a buffer
+            verbose = false, -- show error notification if .env file is not found and if .env is loaded
+        },
+    },
+    {
         "stevearc/overseer.nvim",
         dependencies = {
+            "ellisonleao/dotenv.nvim",
             "nvim-telescope/telescope.nvim",
         },
-        opts = {},
+        opts = { dap = false },
+        config = function(_, opts)
+            local oc = require("plugins.configs.overseerconfig")
+            oc.register_opts(opts)
+            oc.register_templates()
+        end,
     },
     -- comment plugin enable auto comment for nested typescript/css in .vue file
     {
