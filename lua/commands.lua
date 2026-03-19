@@ -86,3 +86,9 @@ end
 vim.keymap.set("n", "<leader>gg", function()
     run_command_and_exit("lazygit")
 end, { desc = "lazygit in float term" })
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+    pattern = "*.toml.tpl",
+    callback = function()
+        vim.bo.filetype = "toml"
+    end,
+})

@@ -130,7 +130,6 @@ map({ "n", "t" }, "<leader>tf", function()
     })
 end, { desc = "terminal toggle floating term" })
 
-map("n", "<leader>sf", "<cmd> echo expand('%') <CR>", { desc = "show current file path" })
 map("n", "<leader>cf", "<cmd>%y+<CR>", { desc = "general copy whole file" })
 map("n", "<leader>cp", "<cmd>let @+ = expand('%')<CR>", { desc = "copy relative path of current file." })
 
