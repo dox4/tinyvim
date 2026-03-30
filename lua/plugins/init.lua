@@ -53,6 +53,7 @@ local plugins = {
     -- syntax highlighting
     {
         "nvim-treesitter/nvim-treesitter",
+        branch = "main",
         build = ":TSUpdate",
         -- treesitter require config() to setup rather than opts
         config = function()
@@ -60,17 +61,8 @@ local plugins = {
                 dofile(vim.g.base46_cache .. "syntax")
                 dofile(vim.g.base46_cache .. "treesitter")
             end)
-
-            require("nvim-treesitter.configs").setup({
-                ensure_installed = { "lua", "go", "python", "rust" },
-
-                highlight = {
-                    enable = true,
-                    use_languagetree = true,
-                },
-
-                indent = { enable = true },
-            })
+            local ts = require("nvim-treesitter")
+            ts.install({ "lua", "go", "python", "rust" })
         end,
     },
 
