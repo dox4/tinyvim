@@ -102,20 +102,20 @@ local plugins = {
 
     {
         "mason-org/mason-lspconfig.nvim",
+        lazy = true,
         opts = {
             ensure_installed = { "lua_ls", "rust_analyzer", "ruff", "gopls", "vtsls" },
             automatic_enable = { "vtsls" },
         },
         dependencies = {
             { "mason-org/mason.nvim", opts = {} },
-            "neovim/nvim-lspconfig",
         },
     },
 
     {
         "neovim/nvim-lspconfig",
         event = { "BufReadPre", "BufNewFile" },
-        dependencies = { "saghen/blink.cmp" },
+        dependencies = { "saghen/blink.cmp", "mason-org/mason-lspconfig.nvim" },
         config = function()
             require("plugins.configs.lspconfig")
         end,
@@ -175,6 +175,12 @@ local plugins = {
             "nvim-telescope/telescope-ui-select.nvim",
         },
         cmd = "Telescope",
+        init = function()
+            vim.ui.select = function(...)
+                require("lazy").load({ plugins = { "telescope.nvim" } })
+                return vim.ui.select(...)
+            end
+        end,
         opts = function()
             return require("plugins.configs.telescope")
         end,
@@ -297,6 +303,8 @@ local plugins = {
     },
     {
         "igorlfs/nvim-dap-view",
+        lazy = true,
+        cmd = "DapViewToggle",
         ---@module 'dap-view'
         ---@type dapview.Config
         opts = {},
@@ -314,6 +322,20 @@ local plugins = {
             "ellisonleao/dotenv.nvim",
             "nvim-telescope/telescope.nvim",
         },
+        cmd = {
+            "OverseerBuild",
+            "OverseerClearCache",
+            "OverseerClose",
+            "OverseerDeleteBundle",
+            "OverseerLoadBundle",
+            "OverseerOpen",
+            "OverseerQuickAction",
+            "OverseerRun",
+            "OverseerRunCmd",
+            "OverseerSaveBundle",
+            "OverseerTaskAction",
+            "OverseerToggle",
+        },
         opts = { dap = false },
         config = function(_, opts)
             local oc = require("plugins.configs.overseerconfig")
@@ -324,6 +346,7 @@ local plugins = {
     -- comment plugin enable auto comment for nested typescript/css in .vue file
     {
         "JoosepAlviste/nvim-ts-context-commentstring",
+        lazy = true,
         dependencies = {
             "nvim-treesitter/nvim-treesitter",
         },
@@ -333,6 +356,12 @@ local plugins = {
     },
     {
         "olimorris/codecompanion.nvim",
+        cmd = {
+            "CodeCompanion",
+            "CodeCompanionChat",
+            "CodeCompanionCmd",
+            "CodeCompanionActions",
+        },
         opts = {
             adapters = {
                 http = {
@@ -493,6 +522,7 @@ if require("inneroptions").enable_inner_options() then
         plugins, -- condeverse
         {
             require("inneroptions").get_inner_plugin_url(),
+            event = "InsertEnter",
             config = function()
                 require("trae").setup({})
             end,

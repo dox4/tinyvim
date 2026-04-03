@@ -20,6 +20,20 @@ vim.api.nvim_create_autocmd("LspAttach", {
         end, { buffer = ev.buf, desc = "telescope.builtin lsp_implementations" })
         vim.keymap.set("n", "gK", vim.lsp.buf.signature_help, { buffer = ev.buf, desc = "lsp signature_help" })
 
+        vim.keymap.set("n", "goc", function()
+            require("telescope.builtin").lsp_outgoing_calls({ reuse_win = true })
+        end, { buffer = ev.buf, desc = "lsp outgoing calls" })
+        vim.keymap.set("n", "gic", function()
+            require("telescope.builtin").lsp_incoming_calls({ reuse_win = true })
+        end, { buffer = ev.buf, desc = "lsp incoming calls" })
+
+        vim.keymap.set("n", "gsd", function()
+            require("telescope.builtin").lsp_document_symbols()
+        end, { buffer = ev.buf, desc = "lsp document symbols" })
+
+        -- vim.keymap.set("n", "gsw", function()
+        --     require("telescope.builtin").lsp_workspace_symbols()
+        -- end, { buffer = ev.buf, desc = "lsp workspace symbols" })
         -- vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
         -- vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
         -- vim.keymap.set("n", "<leader>wl", function()

@@ -1,9 +1,7 @@
 local map = vim.keymap.set
 
 -- general mappings
-map("n", "<C-s>", "<cmd> w <CR>")
 map("i", "jk", "<ESC>")
-map("n", "<C-c>", "<cmd> %y+ <CR>") -- copy whole filecontent
 
 map("n", "<C-h>", "<cmd>wincmd h<cr>", { desc = "Go to left window" })
 map("n", "<C-j>", "<cmd>wincmd j<cr>", { desc = "Go to lower window" })
@@ -45,7 +43,7 @@ map("n", "<S-Tab>", function()
 end, { desc = "buffer goto prev" })
 
 -- outline
-map("n", "<leader>a", "<cmd>AerialToggle!<CR>")
+map("n", "<leader>ta", "<cmd>AerialToggle!<CR>", { desc = "Aerial Toggle (Outline)" })
 
 -- format
 map("n", "<leader>lf", function()
@@ -55,7 +53,7 @@ map("n", "<leader>lf", function()
         timeout_ms = 1500,
     })
 end, { desc = "conform format" })
-map("v", "<leader>f", function()
+map("v", "<leader>lf", function()
     require("conform").format({
         lsp_fallback = true,
         range = {
@@ -97,8 +95,6 @@ map("n", "<Esc>", "<cmd> noh <cr>", { desc = "clear search match highlight" })
 -- OverseerClearCache
 -- OverseerClose
 -- OverseerDeleteBundle
--- OverseerInfo
-map("n", "<leader>oi", "<cmd> OverseerInfo <CR>", { desc = "OverseerInfo" })
 -- OverseerLoadBundle
 -- OverseerOpen
 map("n", "<leader>oo", "<cmd> OverseerOpen <CR>", { desc = "OverseerOpen" })
