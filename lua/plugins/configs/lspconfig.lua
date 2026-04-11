@@ -103,6 +103,9 @@ local settings = {
     ["vue_ls"] = vue_config[1],
     ["vtsls"] = vue_config[2],
     ["ocamllsp"] = {},
+    ["jinja_lsp"] = {},
+    ["kotlin_lsp"] = {},
+    ["jdtls"] = {},
 }
 
 for server, configs in pairs(settings) do
