@@ -15,7 +15,7 @@ opt.relativenumber = false -- disable relativenumber
 opt.tabstop = 4 -- number of spaces tabs count for
 opt.shiftwidth = 4
 opt.autoindent = true
-opt.expandtab = false
+opt.expandtab = true
 opt.smartindent = true
 opt.number = true
 

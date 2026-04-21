@@ -162,10 +162,10 @@ local function show_lsp_info()
         table.insert(lines, string.format("   ID: %s", client.id))
         table.insert(lines, string.format("   Root directory: %s", client.config.root_dir or "N/A"))
         table.insert(lines, string.format("   Filetypes: %s", table.concat(client.config.filetypes or {}, ", ")))
-        table.insert(lines, "   Capabilities:")
-        local capabilities_str = vim.inspect(client.server_capabilities)
-        for _, line in ipairs(vim.split(capabilities_str, "\n")) do
-            table.insert(lines, "     " .. line)
+        table.insert(lines, "   Config:")
+        local cnfraw = vim.inspect(client.config)
+        for _, line in ipairs(vim.split(cnfraw, "\n")) do
+            table.insert(lines, "   " .. line)
         end
         table.insert(lines, "")
     end

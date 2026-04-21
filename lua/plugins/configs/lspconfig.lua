@@ -105,7 +105,17 @@ local settings = {
     ["ocamllsp"] = {},
     ["jinja_lsp"] = {},
     ["kotlin_lsp"] = {},
-    ["jdtls"] = {},
+    ["jdtls"] = {
+        settings = {
+            java = {
+                format = {
+                    settings = {
+                        url = vim.fn.stdpath("config") .. "/java-formatter/formatter.xml",
+                    },
+                },
+            },
+        },
+    },
 }
 
 for server, configs in pairs(settings) do

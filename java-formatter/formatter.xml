@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<profiles version="21">
+    <profile name="MyDefaultJavaStyle" version="21">
+        <setting id="org.eclipse.jdt.core.formatter.lineSplit" value="120"></setting>
+        <setting id="org.eclipse.jdt.core.formatter.comment.line_length" value="120"></setting>
+        <setting id="org.eclipse.jdt.core.formatter.tabulation.char" value="space"></setting>
+        <setting id="org.eclipse.jdt.core.formatter.tabulation.size" value="4"></setting>
+        <setting id="org.eclipse.jdt.core.formatter.indentation.size" value="4"></setting>
+    </profile>
+</profiles>
