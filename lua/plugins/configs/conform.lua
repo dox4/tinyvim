@@ -5,6 +5,7 @@ require("conform").setup({
         lua = { "stylua" },
         go = { "gofmt", "golines" },
         sh = { "shfmt", "shellcheck" },
+        zsh = { "shfmt", "shellcheck" },
         json = { "prettier" },
         jsonc = { "prettier" },
         vue = { "prettier" },
@@ -12,6 +13,7 @@ require("conform").setup({
         javascript = { "prettier" },
         ps = { "prettier" },
         typescriptreact = { "prettier" },
+        xml = { "xmlformatter" },
         html = { "prettier" },
         yaml = { "yamlfmt" },
         python = function(_)
@@ -54,6 +56,7 @@ require("conform").setup({
         sql = { "sql_formatter" },
         terraform = { "terraform_fmt" },
         ocaml = { "ocamlformat" },
+        kotlin = { "ktfmt", "ktlint" },
     },
     formatters = {
         prettier = {
@@ -93,11 +96,18 @@ require("conform").setup({
 
         shfmt = {
             inherit = true,
-            prepend_args = {
-                "-i",
-                "4",
-                "-ci",
-            },
+            prepend_args = function(_, ctx)
+                local args = {
+                    "-i",
+                    "4",
+                    "-ci",
+                }
+                local filetype = vim.api.nvim_buf_get_option(ctx.buf, "filetype")
+                if filetype == "zsh" then
+                    table.insert(args, "-ln=zsh")
+                end
+                return args
+            end,
         },
 
         taplo = {},
@@ -108,5 +118,9 @@ require("conform").setup({
 
         terraform_fmt = {},
         ocamlformat = {},
+        xmlformatter = {
+            inherit = true,
+            prepend_args = { "--indent", "4", "--encoding", "utf-8" },
+        },
     },
 })
