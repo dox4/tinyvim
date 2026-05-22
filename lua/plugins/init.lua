@@ -337,11 +337,11 @@ local plugins = {
             "OverseerToggle",
         },
         opts = { dap = false },
-        config = function(_, opts)
-            local oc = require("plugins.configs.overseerconfig")
-            oc.register_opts(opts)
-            oc.register_templates()
-        end,
+        -- config = function(_, opts)
+        --     local oc = require("plugins.configs.overseerconfig")
+        --     oc.register_opts(opts)
+        --     oc.register_templates()
+        -- end,
     },
     -- comment plugin enable auto comment for nested typescript/css in .vue file
     {
