@@ -6,23 +6,21 @@ local function get_uv_lock(opts)
     return vim.fs.find("uv.lock", { upward = true, type = "file", path = opts.dir })[1]
 end
 
-local function get_scripts_from_pyproject(cwd)
+local function get_scripts_from_pyproject(pyproject)
     local scripts = {}
-    local pyproject_path = vim.fs.joinpath(cwd, "pyproject.toml")
-    if vim.fn.filereadable(pyproject_path) == 0 then
+
+    local taohua = require("taohua")
+    local ret = taohua.parse_toml(pyproject)
+    if not ret.ok then
+        vim.notify("Failed to parse pyproject.toml: " .. (ret.error or "unknown error"), vim.log.levels.WARN)
         return scripts
     end
 
-    local in_scripts = false
-    for _, line in ipairs(vim.fn.readfile(pyproject_path)) do
-        if line:match("^%s*%[project%.scripts%]") then
-            in_scripts = true
-        elseif line:match("^%s*%[") and in_scripts then
-            break
-        elseif in_scripts then
-            local name, command = line:match("^%s*([%w%-_]+)%s*=%s*(.+)")
-            if name and command then
-                table.insert(scripts, { name = name, command = command:gsub("[\"']", "") })
+    local parsed = ret.value
+    if parsed.project and parsed.project.scripts then
+        for name, command in pairs(parsed.project.scripts) do
+            if type(command) == "string" then
+                table.insert(scripts, { name = name, command = command })
             end
         end
     end
@@ -81,7 +79,9 @@ return {
             end,
         })
 
-        for _, script in ipairs(get_scripts_from_pyproject(cwd)) do
+        local scripts = get_scripts_from_pyproject(pyproject)
+
+        for _, script in ipairs(scripts) do
             table.insert(ret, {
                 name = string.format("uv run %s", script.name),
                 desc = string.format("Script: %s", script.command),

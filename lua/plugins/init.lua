@@ -317,10 +317,15 @@ local plugins = {
         },
     },
     {
+        "dox4/taohua.nvim",
+        build = "make build-plugin",
+    },
+    {
         "stevearc/overseer.nvim",
         dependencies = {
             "ellisonleao/dotenv.nvim",
             "nvim-telescope/telescope.nvim",
+            "dox4/taohua.nvim",
         },
         cmd = {
             "OverseerBuild",
