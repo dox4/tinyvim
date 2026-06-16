@@ -61,8 +61,31 @@ local plugins = {
                 dofile(vim.g.base46_cache .. "syntax")
                 dofile(vim.g.base46_cache .. "treesitter")
             end)
+            local langs = {
+                "bash",
+                "go",
+                "java",
+                "javascript",
+                "json",
+                "lua",
+                "markdown",
+                "mermaid",
+                "python",
+                "rust",
+                "toml",
+                "typescript",
+                "vim",
+                "vue",
+            }
             local ts = require("nvim-treesitter")
-            ts.install({ "lua", "go", "python", "rust" })
+            ts.install(langs)
+            vim.api.nvim_create_autocmd("FileType", {
+                pattern = langs,
+                callback = function(args)
+                    pcall(vim.treesitter.start)
+                    vim.bo[args.buf].indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
+                end,
+            })
         end,
     },
 
@@ -430,8 +453,8 @@ local plugins = {
             cli = {
                 tools = {
                     coco = {
-                        cmd = { "coco" },
-                        title = "Coco AI",
+                        cmd = { "traex" },
+                        title = "Trae CLI 2.0 based on codex",
                     },
                 },
             },
