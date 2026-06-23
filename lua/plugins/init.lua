@@ -382,56 +382,40 @@ local plugins = {
             enable_autocmd = false,
         },
     },
+    -- AI code completion via blink.cmp
     {
-        "olimorris/codecompanion.nvim",
-        cmd = {
-            "CodeCompanion",
-            "CodeCompanionChat",
-            "CodeCompanionCmd",
-            "CodeCompanionActions",
-        },
-        opts = {
-            adapters = {
-                http = {
-                    siliconflow_r1 = function()
-                        return require("codecompanion.adapters").extend("deepseek", {
-                            name = "siliconflow_r1",
-                            url = "https://api.siliconflow.cn/v1/chat/completions",
-                            env = {
-                                api_key = "DEEPSEEK_API_KEY",
-                            },
-                            schema = {
-                                model = {
-                                    default = "deepseek-ai/DeepSeek-R1-0528-Qwen3-8B",
-                                    choices = {
-                                        ["deepseek-ai/DeepSeek-R1-0528-Qwen3-8B"] = { opts = { can_reason = true } },
-                                        "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
-                                    },
-                                },
-                            },
-                        })
-                    end,
+        "milanglacier/minuet-ai.nvim",
+        dependencies = { "saghen/blink.cmp" },
+        config = function()
+            require("minuet").setup({
+                provider = "openai_compatible",
+                -- throttle = 1500,
+                -- debounce = 600,
+                -- request_timeout = 3,
+                notify = "verbose",
+                n_completions = 3,
+                blink = {
+                    enable_auto_complete = true,
                 },
-            },
-            strategies = {
-                -- Change the default chat adapter
-                chat = {
-                    adapter = "siliconflow_r1",
+                provider_options = {
+                    openai_compatible = {
+                        name = "Ark",
+                        api_key = "ARK_API_KEY",
+                        end_point = "https://ark.cn-beijing.volces.com/api/v3/chat/completions",
+                        model = "deepseek-v4-flash-260425",
+                        stream = true,
+                        optional = {
+                            max_tokens = 128,
+                            top_p = 0.9,
+                            thinking = {
+                                type = "disabled"
+                            }
+
+                        },
+                    },
                 },
-                inline = {
-                    adapter = "siliconflow_r1",
-                },
-            },
-            opts = {
-                -- Set debug logging
-                log_level = "DEBUG",
-                language = "Chinese",
-            },
-        },
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "nvim-treesitter/nvim-treesitter",
-        },
+            })
+        end,
     },
     {
         "xiyaowong/transparent.nvim",

@@ -8,7 +8,7 @@ local opts = {
     sources = {
         -- `lsp`, `buffer`, `snippets`, `path` and `omni` are built-in
         -- so you don't need to define them in `sources.providers`
-        default = { "lsp", "buffer", "snippets", "path", "datword", "trae" },
+        default = { "lsp", "buffer", "snippets", "path", "datword", "minuet" },
 
         providers = {
             -- add datword provider
@@ -25,11 +25,19 @@ local opts = {
                 },
             },
 
-            trae = {
-                name = "trae",
-                module = "blink.compat.source",
-                score_offset = 500,
-                opts = {},
+            -- trae = {
+            --     name = "trae",
+            --     module = "blink.compat.source",
+            --     score_offset = 500,
+            --     opts = {},
+            -- },
+
+            minuet = {
+                name = "minuet",
+                module = "minuet.blink",
+                async = true,
+                timeout_ms = 5000,
+                score_offset = 500, -- Gives minuet higher priority among suggestions
             },
         },
     },
