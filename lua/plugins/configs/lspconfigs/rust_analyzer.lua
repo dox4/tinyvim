@@ -4,11 +4,16 @@ return {
     end,
     settings = {
         ["rust-analyzer"] = {
+            numThreads = 4,
+            cachePriming = { numThreads = 2 },
             cargo = {
                 loadOutDirsFromCheck = true,
                 buildScripts = {
                     enable = true,
                 },
+            },
+            files = {
+                excludeDirs = { "target", ".git" },
             },
             imports = {
                 granularity = {
@@ -16,7 +21,9 @@ return {
                 },
                 prefix = "self",
             },
-            checkOnSave = true,
+            checkOnSave = false,
+            cacheOnDisk = true,
+            lruCapacity = 65535,
             procMacro = {
                 enable = true,
                 ignored = {
